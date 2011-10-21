@@ -1,0 +1,260 @@
+--  This file is part of the BasilicPlus system
+--  Version 1.0.2b, packaged on February 22nd, 2007.
+--  
+--  http://lsiit.u-strasbg.fr/Software/BasilicPlus
+--  
+--  BasilicPlus is based on Basilic and like 
+--  Basilic  is  free software; you can redistribute it and/or modify
+--  it under the terms of the GNU General Public License as published
+--  by the Free Software Foundation; either version 2 of the License,
+--  or (at your option) any later version.
+--  
+--  BasilicPlus  is  distributed  in the hope that it will be useful, but
+--  WITHOUT  ANY  WARRANTY ; without  even  the  implied  warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+--  General Public License for more details.
+--  
+--  You should have received a copy of the GNU General Public License
+--  along with BasilicPlus; if not, write to the Free Software Foundation
+--  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+--
+-- phpMyAdmin SQL Dump
+-- version 2.6.2-Debian-3sarge1
+-- http://www.phpmyadmin.net
+-- 
+-- Généré le : Mercredi 18 Octobre 2006 à 16:08
+-- Version du serveur: 4.0.24
+-- Version de PHP: 4.3.10-16
+-- 
+-- Base de données: `basilic`
+-- 
+
+-- --------------------------------------------------------
+
+-- 
+-- Structure de la table `authors`
+-- 
+
+CREATE TABLE `authors` (
+  `id` smallint(5) unsigned NOT NULL auto_increment,
+  `first` varchar(30) NOT NULL default '',
+  `last` varchar(30) NOT NULL default '',
+  `mail` varchar(100) NOT NULL default '',
+  `org` varchar(128) NOT NULL default '',
+  `tel` varchar(64) NOT NULL default '',
+  `precisions` varchar(50) NOT NULL default '',
+  `position` tinyint(4) NOT NULL default '9',
+  `statut` enum('departed','actual') NOT NULL default 'actual',
+  `url` varchar(1000) NOT NULL default '',
+  `bureau` varchar(100) NOT NULL default '',
+  `is_author` enum('oui','non') NOT NULL default 'oui',
+  `direction` varchar(100) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `kfirst` (`first`,`last`),
+  KEY `last` (`last`)
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Structure de la table `docs`
+-- 
+
+CREATE TABLE `docs` (
+  `id` smallint(6) unsigned NOT NULL auto_increment,
+  `type` enum('PDF','PS','PPT','ABS','IMG','MOV','INFO','TXT') NOT NULL default 'PDF',
+  `source` varchar(255) NOT NULL default '',
+  `size` int(10) unsigned default NULL,
+  `sizeX` smallint(5) unsigned default NULL,
+  `sizeY` smallint(5) unsigned default NULL,
+  `protect` enum('public','private') NOT NULL default 'public',
+  `dt_create` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Structure de la table `equip`
+-- 
+
+CREATE TABLE `equip` (
+  `id` smallint(5) unsigned NOT NULL auto_increment,
+  `sigle` varchar(10) NOT NULL default '',
+  `is_lab` enum('yes','no') NOT NULL default 'no',
+  `description` text NOT NULL default '',
+  `password` varchar(50) NOT NULL default '',
+  `logo` varchar(100) default NULL,
+  PRIMARY KEY  (`id`),
+  FULLTEXT KEY `description` (`description`)
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `months`
+--
+
+CREATE TABLE `months` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(20) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 ;
+
+--
+-- Contenu de la table `months`
+--
+
+INSERT INTO `months` (`id`, `name`) VALUES (1, 'january'),
+(2, 'february'),
+(3, 'march'),
+(4, 'april'),
+(5, 'may'),
+(6, 'june'),
+(7, 'july'),
+(8, 'august'),
+(9, 'september'),
+(10, 'october'),
+(11, 'november'),
+(12, 'december'),
+(0, '');
+
+-- -------------------------------------------------------
+
+-- 
+-- Structure de la table `projects`
+-- 
+
+CREATE TABLE `projects` (
+  `id` int(10) NOT NULL auto_increment,
+  `prshortdesc` text NOT NULL,
+  `prdesc` text NOT NULL,
+  `prname` varchar(64) NOT NULL default '0',
+  `prabbrv` varchar(10) NOT NULL default '0',
+  `prlink` varchar(128) NOT NULL default '',
+  `prlogo` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `prid` (`id`),
+  KEY `prid_2` (`id`)
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
+
+INSERT INTO `projects` VALUES (1, 'None', 'None', 'None', 'None', '', '');
+
+-- --------------------------------------------------------
+
+-- 
+-- Structure de la table `publiauthors`
+-- 
+
+CREATE TABLE `publiauthors` (
+  `idAuthor` smallint(5) unsigned NOT NULL default '0',
+  `idPubli` smallint(5) unsigned NOT NULL default '0',
+  `rank` smallint(5) unsigned NOT NULL default '0',
+  KEY `idAuthor` (`idAuthor`),
+  KEY `idPubli` (`idPubli`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Structure de la table `publidocs`
+-- 
+
+CREATE TABLE `publidocs` (
+  `idDoc` smallint(6) unsigned NOT NULL default '0',
+  `idPubli` smallint(5) unsigned NOT NULL default '0'
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Structure de la table `publiequip`
+-- 
+
+CREATE TABLE `publiequip` (
+  `idEquip` smallint(5) unsigned NOT NULL default '0',
+  `idPubli` smallint(5) unsigned NOT NULL default '0',
+  `rank` smallint(5) unsigned NOT NULL default '0',
+  KEY `idEquip` (`idEquip`),
+  KEY `idPubli` (`idPubli`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Structure de la table `publis`
+-- 
+
+CREATE TABLE `publis` (
+  `id` smallint(5) NOT NULL auto_increment,
+  `bibTex` varchar(30) NOT NULL default '',
+  `entry` enum('Article','InProceedings','InBook','Book','PhdThesis','MastersThesis','TechReport','Misc','Booklet','InCollection','Manual','Proceedings','Unpublished') NOT NULL default 'Article',
+  `address` varchar(255) NOT NULL default '',
+  `booktitle` varchar(255) NOT NULL default '',
+  `chapter` varchar(200) NOT NULL default '',
+  `edition` varchar(50) NOT NULL default '',
+  `editor` varchar(255) NOT NULL default '',
+  `howpublished` varchar(255) NOT NULL default '',
+  `institution` varchar(255) NOT NULL default '',
+  `journal` varchar(255) NOT NULL default '',
+  `keywords` varchar(255) NOT NULL default '',
+  `month` varchar(30) NOT NULL default '',
+  `note` text not null default '',
+  `number` varchar(10) NOT NULL default '',
+  `optkey` varchar(255) NOT NULL default '',
+  `organization` varchar(255) NOT NULL default '',
+  `pages` varchar(15) NOT NULL default '',
+  `publisher` varchar(255) NOT NULL default '',
+  `school` varchar(255) NOT NULL default '',
+  `series` varchar(255) NOT NULL default '',
+  `title` varchar(255) NOT NULL default '',
+  `type` varchar(255) NOT NULL default '',
+  `volume` varchar(20) NOT NULL default '',
+  `year` varchar(4) NOT NULL default '0000',
+  `issn` varchar(70) NOT NULL default '',
+  `doi` varchar(100) NOT NULL default '',
+  `proceedings` varchar(255) NOT NULL default '',
+  `location` varchar(255) NOT NULL default '',
+  `range` enum('nationales','internationales') default NULL,
+  `team` varchar(10) NOT NULL default '',
+  `project` int(10) NOT NULL default '1',
+  `url` varchar(255) NOT NULL default '',
+  `class_acti` enum('1','2','3','4','5','6','7','8','9') NOT NULL default '1',
+  `com_lect` enum('avec','sans') default NULL,
+  `dt_create` datetime NOT NULL default '0000-00-00 00:00:00',
+  `dt_modif` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `bibTex` (`bibTex`),
+  KEY `year` (`year`)
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+-- 
+-- Structure de la table `status`
+-- 
+
+CREATE TABLE `status` (
+  `ustatus` int(11) NOT NULL auto_increment,
+  `position` varchar(35) NOT NULL default '0',
+  `position_fr` varchar(50) NOT NULL default '0',
+  `position_de` varchar(35) NOT NULL default '0',
+  `ordre` int(11) NOT NULL default '0',
+  UNIQUE KEY `ustatus` (`ustatus`),
+  KEY `ustatus_2` (`ustatus`)
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
+
+INSERT INTO `status` VALUES (1, 'Professor', 'Professeur', 'Professor', 1);
+INSERT INTO `status` VALUES (4, 'Assitant-Professor', 'Ma&icirc;tre de Conf&eacute;rences', 'Privatdozent', 4);
+INSERT INTO `status` VALUES (14, 'Unknown', 'Non connue', 'Unbekannt', 0);
+INSERT INTO `status` VALUES (11, 'PhD student', 'Doctorant', 'Doktorand', 11);
+INSERT INTO `status` VALUES (8, 'Technical Engineer', 'Ing&eacute;nieur d''&eacute;tudes', 'Studieningenieur', 8);
+INSERT INTO `status` VALUES (6, 'Research Engineer', 'Ing&eacute;nieur de recherche', 'Forschungsingenieur', 6);
+INSERT INTO `status` VALUES (13, 'Intern', 'Stagiaire', 'Praktikant', 13);
+INSERT INTO `status` VALUES (9, 'Contract Engineer', 'Ing&eacute;nieur d''&eacute;tude contractuel', 'Vertragsingenieur', 9);
+INSERT INTO `status` VALUES (7, 'Contract Engineer', 'Ing&eacute;nieur de recherche contractuel', 'Vertragsingenieur', 7);
+INSERT INTO `status` VALUES (5, 'Research Scientist', 'Charg&eacute; de Recherche', 'Forschungsbeauftragter', 5);
+INSERT INTO `status` VALUES (10, 'Post-PhD', 'Postdoc', 'Postdoc', 10);
+INSERT INTO `status` VALUES (3, 'Senior Scientist', 'Habilit&eacute; &agrave; Diriger des Recherches', 'Habilitierter Assistent', 3);
+INSERT INTO `status` VALUES (2, 'Professor Emeritus', 'Professeur &eacute;m&eacute;rite', 'Professor Emeritiert', 2);
+INSERT INTO `status` VALUES (12, 'Research Scientist', 'Chercheur contractuel', 'Vertragsingenieur', 12);

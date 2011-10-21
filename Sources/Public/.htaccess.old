@@ -1,0 +1,3 @@
+<DirectoryMatch /home/www/Publications/>
+	php_flag register_globals Off
+</DirectoryMatch>

@@ -1,0 +1,5 @@
+<Limit GET POST>
+order Deny,Allow
+Allow from @@netaddr@@
+Deny from ALL
+</Limit>

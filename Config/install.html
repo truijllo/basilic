@@ -1,0 +1,293 @@
+<!--
+  This file is part of the BasilicPlus system
+  Version 1.0.2b, packaged on February 22nd, 2007.
+  
+  http://lsiit.u-strasbg.fr/Software/BasilicPlus
+  
+  BasilicPlus is based on Basilic and like 
+  Basilic  is  free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published
+  by the Free Software Foundation; either version 2 of the License,
+  or (at your option) any later version.
+  
+  BasilicPlus  is  distributed  in the hope that it will be useful, but
+  WITHOUT  ANY  WARRANTY ; without  even  the  implied  warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with BasilicPlus; if not, write to the Free Software Foundation
+  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+<?xml version='1.0' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//en' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+<head>
+ <title>BasilicPlus : Configuration</title>
+ <link rel='shortcut icon' href='Images/basilic.ico' />
+ <link rel='stylesheet' href='CSS/basilic.css' type='text/css' />
+</head>
+
+<body>
+
+<div class="content">
+
+<div class="center">
+ <img src="Images/basilicPlus.jpg"/>
+ <h1>Installation instructions</h1>
+</div>
+
+The configuration process is done using the <code>configure</code> bash script. The first lines of
+this script contain all configuration options. The first part of the configuration process checks
+your server configuration. Now go to the <code>BasilicPlus-1.0</code> directory and type:
+
+<pre>
+> ./configure
+</pre>
+
+This will create the <a href="checkConfig.php"><code>checkConfig.php</code></a> file in the current
+directory. Open this file in an other browser to see the results of the test suite. Make sure you
+access this file through your web server using an URL like
+<code>http://your-server/pathToBasilic/BasilicPlus-1.0/checkConfig.php</code> and not as a
+<code>file://</code>, so that php scripts are properly interpreted.
+
+
+<h2>php configuration</h2>
+
+If <a href="checkConfig.php"><code>checkConfig.php</code></a> displays as an empty page in your
+browser, first check that the file is present and readable. Then, tune your apache-php configuration
+and make sure Apache handles php scripts: Your <code>httpd.conf</code> should especially contain a
+line like:
+
+<pre>
+AddType application/x-httpd-php .php
+</pre>
+
+Make a simple test by creating a <code>test.php</code> file that simply contains the following
+line. It should display complete php and apache server configuration details:
+<pre>
+&lt;?php phpinfo(); ?&gt;
+</pre>
+
+<h2 id="mysql">mySQL configuration</h2>
+
+Once php is set, you need to create a new dedicated database in mySQL <!-- (skip this part if you are
+updating an existing <code>Basilic</code> system, see the <a href="#update">update section</a>). -->
+Sufficient priviledges are required to do this (ask your web admin if needed) :
+
+<pre>
+mysql -uroot -p  (add the "-h your.web.server" option if you use the mySQL server remotely)
+Enter password : ******
+mysql> CREATE DATABASE basilic DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;  (if you use an other name, change mysqlDatabase value in configure)
+Query OK, 1 row affected (0.00 sec)
+mysql> USE basilic;
+Database changed
+</pre>
+
+Then cut and paste the content of <a href="Config/tables.txt">tables.txt</a> in your mySQL console
+in order to create the nine tables in this database : <code>publis, docs, authors, equip, projects, publidocs, publiauthors, publiequip, status</code>.
+
+<p>
+Finally, create two new users who will have access to this database: <code>www</code> is only
+allowed to select (used by web site visitors) while <code>intranet</code> can edit the database
+(local administration):
+</p>
+
+<pre>
+mysql> GRANT SELECT ON basilic.* TO 'www'@'localhost' IDENTIFIED BY 'www';
+mysql> GRANT SELECT,INSERT,UPDATE,DELETE ON basilic.* TO 'intranet'@'localhost' IDENTIFIED BY 'choose an intranet password';
+</pre>
+
+The names and passwords can of course be changed (compulsory for the intranet password).
+
+<p>
+Once all this is done, quit mySQL (using <code>quit;</code>) and edit the mySQL section of
+<code>configure</code> to update the users' names and passwords. Run <code>configure</code> once
+more to update <code>checkConfig.php</code> and correct possible problems as indicated in this page
+before proceeding.
+</p>
+
+<h2>Thumbnail creation using <code>convert</code></h2>
+
+ImageMagick's <a href="http://www.imagemagick.org"><code>convert</code></a> must be installed for
+automatic thumbnail creation. The apache user (who is running the web server) should be able to run
+it from <code>php</code> scripts.
+
+<p>
+Install <code>convert</code> on your web server, optionnaly change <code>ConvertCommand</code>
+command line in <code>configure</code>. Re-run <code>configure</code> and check its results in
+<a href="checkConfig.php"><code>checkConfig.php</code></a> until a thumbnail is created.
+</p>
+
+
+<h2>File hierarchy</h2>
+
+The publication web server hierarchy is divided into a public part (publications associated pages
+and index pages) and an intranet part (database edition pages). Access to the intranet part should
+be limited to local users. See the apache <code>htaccess</code> documentation for details on
+protected web directories.
+
+<p>
+Edit the directory configuration section of <code>configure</code> to tune the paths of these
+directories and then run <code>configure</code> to update <a
+href="checkConfig.php"><code>checkConfig.php</code></a> and check the resulting directory structure.
+</p>
+
+
+<h2>Local browser detection</h2>
+
+When a local user browses the publication pages, by default (s)he is allowed to edit the publication
+data. Default configuration is to detect local browsers using their associated machine ip
+address. Is considered an intranet those with an ip of the form
+<code>RemoteAddr</code>.[0-255]. Edit <code>RemoteAddr</code> in <code>configure</code> to match
+your local network submask. 
+
+<p>Edit <code>Intranet/utils.php</code> and modify the function called basilic_rights() to tune rights 
+to access to different services.
+</p>
+
+
+<h2>Laboratory name</h2>
+
+Your laboratory name will appear on top of index pages as well as in the titles. Change
+<code>LabName</code> in <code>configure</code>.
+
+
+<h2>Administrator notification</h2>
+
+Problems with the server are reported though e-mail messages or appended to a log file. Edit
+<code>AdminNotification</code> in <code>configure</code> to set this. If the value contains a '@' it
+is considered as an e-mail address, otherwise it represents the name of a (writable) log file. Php
+must be able to send e-mail with the first option. Re-run <code>configure</code>, update <a
+href="checkConfig.php"><code>checkConfig.php</code></a> in your browser and check that the
+designated recipient receives an e-mail or that the log file is updated.
+
+
+<h2>Installation</h2>
+
+Finally, once all configuration tests have passed, simply click on "Install" to really install the
+<code>BasilicPlus</code> scripts.
+
+
+<!-- <a name="populating"></a>
+<h2>Populating the database</h2>
+
+ See the <a href="#update">update section</a> below if you have already installed an older
+<code>Basilic</code> version and are currently simply updating <code>Basilic</code>. 
+
+<p>
+The database is normally updated using forms in the server backoffice (the intranet part of
+<code>Basilic</code>). However, it may be more convenient to fill the database from a existing
+bibTex file after its installation. In the Basilic sources' <code>Import</code> directory, there is
+a <code>bibtex2table</code> program that does it:
+</p>
+
+<pre>
+cd Import (or add this directory to your PYTHONPATH)
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:. (or use "setenv" with [t]csh)
+bibtex2table myfile.bib
+</pre>
+
+This program is based on the <a href="http://artis.imag.fr/Membres/Xavier.Decoret/resources/xdkbibtex/"><code>xdkbibtex</code></a> library,
+written by Xavier D&eacute;coret. This library is provided already compiled for simplification, but
+consider recompiling it if the program exhibits a weird behavior.
+
+<p>
+You need to clean your bib file in order to initialize the databases with clean data. First, all
+LaTeX specific commands should be removed and translated into latin characters. Second, you must
+unify authors, journals and booktiles names to create unique entries. Four files are generated by
+<code>bibtex2table</code> to help you do this: <code>authorList.txt, journalList.txt,
+booktileList.txt</code> and <code>titleList.txt</code>. Open these files, correct your bibTex as
+indicated, and re-run <code>bibtex2table</code> until all the entries are clean.
+</p>
+
+When the input is cleaned, import the tables into mySQL (or use the <a
+href="http://www.phpmyadmin.net">phpMyAdmin</a> <code>load from file</code> option. You should add
+the <code>-h hostname</code> option if you remotely connect to your mySQL server):
+<pre>
+mysqlimport -u root -p basilic authors.sql publiauthors.sql publis.sql
+</pre>
+
+<p>
+Finally, <a href="/Intranet/Basilic/Publications/updatePublis.php?update=1&forceDirCreation=1">follow
+this link</a> to create all the directories associated to these publications (since you did not use
+the normal backoffice edition pages, these directories were indeed not created).
+</p>
+
+You (and publications' authors) can now move publications' associated documents in their respective
+directories. You can also fill some authors's URL fields in the authors database. -->
+
+
+<!-- <a name="update"></a>
+<h2>Update of an existing database</h2>
+
+Warning messages will be displayed by <code>checkConfig.php</code> about already existing file. You
+may ignore these messages and overwrite your previous configuration during installation. The new
+scripts will replace the older ones, which will be renamed with a <code>.basilic.bak</code>
+extension. If you have changed some of the scripts, you should then merge the two files (usually the
+</code>.css</code> style sheets, or the </code>header.php</code> and </code>footer.php</code>
+scripts).
+
+<p>
+If your database was created with a Basilic version &gt; 1.2, you don't need to create the
+mySQL databases nor do they have to be populate since it is already done. The new scripts should
+seamlessly refer to the old publications' files and directories.
+</p> -->
+
+
+
+<h2 id="look">Look and feel</h2>
+
+The visual appearance of the index and publications' associated pages is defined by the
+<code>listpubli.css</code> and <code>publi.css</code> style sheets, located in
+<code>Public/CSS</code> Path. To add a special header, edit file <code>header.php</code>
+and modify the "own header" part.
+
+ 
+<a name="help"></a>
+<h2>Help pages</h2>
+
+A basilic presentation page as well as a users guide have been installed in the <a
+href="@@BasilicIntranetPath@@/">@@BasilicIntranetPath@@</a> directory.
+
+<a name="polishing"></a>
+<h2>Polishing</h2>
+Make sure the <code>@@PublicationsPath@@</code> directory and the mySQL database are backuped
+regularly.
+
+<p>
+Send the URL of your publication web server to <a href="notyet ciciteseer">citeseer</a> to get
+referenced. Make sure search engines robots have access to your publication web pages. Check your
+web server log and look for bad links during the first days.
+</p>
+
+<a href="mailto:arnaud dot frey at dpt-info dot u-strasbg dot fr">Send me an e-mail</a> so that I can update the
+list of BasilicPlus users. Subscribe to the
+
+<a name="multilingual"></a>
+<h2>Multilingual configuration</h2>
+
+By default, the public part of the publication server handles two different languages. The page
+language is defined by the value of the <code>lg</code> php variable. The headers and texts
+displayed in the index pages and in the publication associated pages depend on this value.
+
+<p>
+<code>lg</code> is modified when you click on the flag in the top banner of a page. The
+<code>getLanguage.php</code> script is called at the beginning of each page and updates
+<code>lg</code> accordingly.
+</p>
+
+<p>
+Default language values are french and english. Simply translate the texts defined at the beginning
+of the <code>publi.php</code> and <code>index.php</code> pages (in
+<code>@@PublicationsPath@@</code>) to implement a new language.
+</p>
+
+<p>
+The intranet pages are in english. If you translate them, please send back the result so that I add
+it into the distribution.
+</p>
+  
+</div>
+
+</body>

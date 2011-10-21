@@ -1,0 +1,29 @@
+	H o w   t o   u s e    i t
+
+
+The import routine is derived by the Basilic original version, adapted to the new db schema and 
+improved in some parts
+
+The import requires two main steps
+
+e.g.  python before_import.py example.bib
+
+
+this produces a few txt and sql files, txt are basically reports used to fix manually bib files.
+
+After each iteration using we can see in txt duplication and other kind of errors in the bib file, 
+so it's possible to re-edit the bib, re-iterate and so on.
+
+After you have finished put sql files in the db
+
+e.g.   mysql -u user -ppasswd db < authors.sql
+
+
+After this you have to edit post_import.py with your db data and launch:
+
+python  post_import.py
+
+this will fix references and initialize some tables
+
+
+

@@ -1,0 +1,84 @@
+.head {
+	position: relative;
+	text-align: center;
+	padding: 2px;
+}
+.author { 
+	font-size:medium;
+	padding: 3px;
+	margin-top: 12px;
+}
+.conf {
+	color:#888888;
+}
+.pdfps {
+	margin-top: 10px;
+}
+.pdfps img {
+	vertical-align: middle;
+}
+.abstract {
+	width:80%;
+	margin: 20px 10%;
+	text-align:justify;
+	background-color:#F5F5F5;
+	border: 1px solid #AAD;
+	padding: 10px;
+}
+
+.imgMovies {
+	margin: 20px;
+	padding: 0;
+	text-align: center;
+}
+.thumb {
+	float: left;
+	position: relative;
+	padding: 0px;
+	margin: 10px;
+	width: 111px;
+	height: 88px;
+	background-image: url("@@ImagesPath@@/thumbImg.png");
+	border: 1px solid #FFF;
+}
+.movie {
+	background-image: url("@@ImagesPath@@/thumbMovie.png");
+}
+.thumb:hover {
+	background-image: url("@@ImagesPath@@/thumbImgHover.png");
+}
+.movie:hover {
+	background-image: url("@@ImagesPath@@/thumbMovieHover.png");
+}
+.thumb img {
+	margin: auto;
+	display: block;
+}
+div.endthumbs{
+	clear: both;
+}
+
+.seeAlso {
+	margin-left: 40px
+}
+.bibtex {
+	margin-left: 40px;
+	font-family:courier new, sans-serif;
+	font-size:small;
+	padding:5px;
+}
+.otherPubli {
+	margin-left:50px;
+	text-align:left;
+}
+.update {
+	background-color: #FEE;
+	padding: 1%;
+	text-align:left;
+}
+.error {
+	border: 2px solid #B44;
+	background-color: #EBB;
+	padding: 6px;
+	margin: 15px 30px;
+}

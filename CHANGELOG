@@ -1,0 +1,58 @@
+
+	     B a s i l i c P l u s   C h a n g e L o g
+
+This is version 1.0.3 Packaged on October 21, 2011.
+
+The latest versions is available at:
+http://www.github.com/truijllo/basilic
+
+forked from :
+http://lsiit.u-strasbg.fr/Software/BasilicPlus
+
+
+----------------------------------------------------
+
+October 21rst, 2011 : Version 1.0.3
+  Various updates and fix
+  New working import routine
+  
+February 22nd, 2007 : Version 1.0.2b
+  Months table added to database (allowing ordering by publication's month)
+  Minor bug fix : handling of composed author names (ex: Mr. "de Mathelin")
+
+October 20th, 2006 : Version 1.0b of BasilicPlus
+  File upload module added with protection of private files
+  Team and Projects handling
+  Tunable rights to access the different services
+  BibTeX import not working anymore...
+
+February 14th, 2005 : Version 1.5.10
+  Small bug with movie thumbnails in document database fixed.
+
+November 22nd, 2004 : Version 1.5.9
+  LaTeX characters are translated into iso in forms. Better BibTeX formating.
+
+November 19th, 2004 : Version 1.5.8
+  Better Basilic update process. CNRS export format polished, export man page (in french).
+  
+November 16th, 2004 : Version 1.5.7
+  Many small improvements since last version. Adding a release number to version number to
+  differentiate them. New XML (CNRS format) display mode.
+  
+November 2nd, 2004 : Version 1.5
+  GNU GPL standardization. Search for a title also searches in keywords. Better .bib
+  import. New fullYear displayPublications option. Year directories created on demand.
+
+October 18th, 2004 : Version 1.4
+  A new displayPublications functions to include query results in any web page. Minor appearance and HTML changes.
+
+September 21st 2004 : Version 1.3
+  Minor bug fixes. Easier update of an existing Basilic system.
+
+August 24th 2004 : Version 1.2
+  Major database modification to fit bibTex standards.
+
+August 10th 2004 : Version 1.1
+  First stable release
+
+July 2004 : Version 1.0-beta

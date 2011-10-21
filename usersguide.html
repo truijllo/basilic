@@ -1,0 +1,241 @@
+<?xml version='1.0' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//en' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+<head>
+ <title>BasilicPlus : Automated Bibliography Server</title>
+ <link rel='shortcut icon' href=Images/basilic.ico' />
+ <link rel='stylesheet' href='CSS/basilic.css' type='text/css' />
+</head>
+
+<body>
+
+<div class="content">
+
+<div class="center">
+ <img src="Images/basilicPlus.jpg"/>
+ <h1>User's Guide</h1>
+</div>
+
+<a name="overview"></a>
+<h2>Technical overview</h2>
+
+BibTex-like publication records (title, authors, year, journal, ...) are stored in a database, and
+web pages are automatically generated from the database using <code>php</code> scripts. Publications
+can be added, edited or deleted using an intranet-based 
+back-office interface. All local users have access to all
+publications -- publications are not managed by their "owner" or by a dedicated administrator. This
+policy can of course be changed, but this freedom ensures an up-to-date server and presents no
+problems in pratice.
+
+<p>
+Each publication has its own associated directory, located in the public (web browseable) section of
+the server. The directories are created automatically when publications are added and include an
+<code>index.php</code> file which is the publication associated web page. These directories are
+organized by year, and have names generated from the initials of the authors' surnames, such as
+<code>ABC04</code>. To add documents, authors have to use the file module in the intranet pages. 
+References to these files will automatically be added on the publication's associated web page. 
+The key feature of the <code>BasilicPlus</code> server is that it handles access to files so as
+private files can be regularly stored as simply as the others on the server, without any public 
+publication. 
+</p>
+
+
+<a name="documents"></a> <h2>Associated documents</h2>
+
+The types of the documents are inferred from their file extensions. Compressed files (final
+extensions <code>.gz, .zip, .Z, bz2, bz</code>) are also supported (if the original file extension
+is supported). The following extensions and types are supported:
+
+<ul>
+ <li><code>txt</code> : full text</li>
+ <li><code>pdf</code> : acrobat pdf format</li>
+ <li><code>ps</code> : postscript</li>
+ <li><code>ppt,pps</code> : powerpoint</li>
+ <li><code>jpg, jpeg, png, tif, tiff, gif, bmp, ppm, xbm, xpm, psd</code> : images</li>
+ <li><code>mpg, mpeg, avi, mov, wmv, qt, mp4</code> : movies</li>
+</ul>
+
+All of these documents are automatically included as links in the publication's dedicated page,
+accessible through small icons. Clicking on the "update" button at the bottom of the publication's
+page updates the web page when new associated documents have been added. A thumbnail is
+automatically generated for images (and almost automatically for movies). The first image thumbnail
+(in alphabetical order) is used to illustrate the publication in the publications-index pages.
+
+<p>
+An abstract for the publication can also be provided in a file named <code>abstract.html</code> (as
+always, located in the publication's associated directory). If your site is multilingual, you can
+provide additional <code>abstract.<i>lg</i>.html</code> files, where <i>lg</i> corresponds to your
+language code (en, fr, de, es...). Available languages depend on the BasilicPlus configuration. Ask your
+web administrator for details.
+</p>
+
+<p>
+Similarly, if there is a file named <code>info.html</code> (or <code>info.<i>lg</i>.html</code>...)
+in the publication's directory, its content will be included in the publication's dedicated web
+page. Here is an example of such a file:
+</p>
+
+<pre>
+See also the page dedicated to this &lt;a href="/Research/thisTopic.html"&gt;research topic&lt;/a&gt;.
+</pre>
+
+These files are written in html format to allow text formatting, images, links..., but they are not
+valid self-contained html files -- their content is included in the middle of another web page, so
+for example the <code>&lt;head&gt;</code> section is not needed, as shown in the above example.
+
+<a name="memberpublis"></a>
+<h2>Members publications' lists</h2>
+
+Creating a link to an author's complete list of publications is as simple as :
+<pre>
+See my &lt;a href="http://yourserver/public_path/index.php?idAuthor=xx"&gt;complete publications list&lt;/a&gt;
+</pre>
+replace <i>yourserver, public_path</i> and <i>xx</i> by the appropriate values (<code>idAuthor</code> is displayed at the bottom of the
+author edition page).
+
+<h3>Display publication query results</h3>
+
+The results of more complex queries can be included in any web page. Authors can for instance list
+their publications in 2004 (for instance in their home page) with a line like :
+
+<pre>
+&lt;?php
+  include("@@PublicationsPath@@/publiUtils.php");
+  displayPublications( array("author"=&gt;"last name here", "year"=&gt;2004) );
+?&gt;
+</pre>
+
+Or, to include a bibTex reference to a specific publication, use a line like:
+<pre>
+&lt;?php
+  include("@@PublicationsPath@@publiUtils.php");
+  displayPublications( array("bibtex"=&gt;"XYZ04", "display"=&gt;"bibtex") );
+?&gt;
+</pre>
+
+<p>
+You need to add <code>CSS/listpubli.css</code> to the list of style sheets at the beginning
+of your file for proper formatting (or create your own one). Note that depending on your php include
+configuration, you may have to specify a relative path to <code>publiUtils.php</code>.
+</p>
+
+The following table summarizes the different options that can be passed to the
+<code>displayPublications</code> function:
+<table>
+<tr><th>Parameter</th><th>Description</th></tr>
+<tr><td><code>author</code></td><td>Exact last name of one of the authors.</td></tr>
+<tr><td><code>bibtex</code></td><td>BibTex key (as it appears in publication's associated directory).</td></tr>
+<tr><td><code>display</code></td><td>Possible values are <code>list</code> (default) and
+<code>bibtex</code>. Same as on the index page.</td></tr>
+<!-- <tr><td><code>full</code></td><td>When <code>true</code>, includes <code>MasterThesis, Manual, Misc, Proceedings</code> and <code>Unpublished</code>
+entries in results. Default value is <code>false</code>.</td></tr> -->
+<tr><td><code>fullYear</code></td><td>When <code>true</code>, results of a given year are not cut,
+even if <code>nbPerPage</code> limit is overpassed. Default value is <code>false</code>.</td></tr>
+<tr><td><code>idAuthor</code></td><td>id of one of the authors (visible when editing author's data in backoffice).</td></tr>
+<tr><td><code>nbPerPage</code></td><td>Maximum number of displayed results. Others are available using
+<code>pg</code><br/>with values greater than 1. Default value is 10. See also <code>fullYear</code>.</td></tr>
+<tr><td><code>pg</code></td><td>When more there are more than <code>nbPerPage</code> results, defines the
+displayed page.<br/>A -1 value means display all results. Default value is 1.</td></tr>
+<tr><td><code>query</code></td><td>For gurus only : direct specification of the sql query. Requires a knowledge
+of the database structure.</td></tr>
+<tr><td><code>title</code></td><td>A part of the title or of keywords (case insensitive).</td></tr>
+<tr><td><code>year</code></td><td>Year of publication.</td></tr>
+</table>
+
+All the provided parameters act as restrictions and are "anded" in the query:
+an <code>array("author"=&gt;"foo", "year"=&gt;2004)</code> parameter means foo's publications in 2004
+for instance.
+
+<br/><br/>
+
+For each year, the results are sorted alphabetically according to the title of the publication. A
+sorting according to the month is impossible since this field may be missing, or given as
+"jan--apr". Displaying the <i>n</i> last publications is hence impossible. However, one can use:
+
+<pre>
+  displayPublications( array("author"=&gt;"last name here", "nbPerPage"=&gt;5, "fullYear"=&gt;true) );
+</pre>
+
+Which will display at least 5 publications, but will continue until the last publication of the last
+printed year is entirely displayed, since there is no reason to cut the display in the middle of this
+alphabetical listing.
+
+
+<a name="otherdocuments"></a>
+<h2>Other documents</h2>
+
+The publication's associated directory may also be the natural place to store other files associated
+with the publication, such a figures or tex files. Put these files in a subdirectory -- only files
+located at the root of the publication directory are automatically referenced. The subdirectory may
+be referenced by <code>info.html</code> if you wish, and it can also be protected by a password. Add
+a few links to the nicest images of this subdirectory to make them appear in the publication's
+dedicated page.
+
+<a name="bibtex"></a>
+<h2>BibTeX standards</h2>
+
+The publication entry types and their optional and required fields are those used by the <a
+href="http://bibliographic.openoffice.org/bibtex-defs.html">BibTeX standard styles</a>. However,
+some optional fields have been made required:
+
+<ul>
+<li><b>year</b> : which was optional for <i>booklet, manual, misc, unpublished</i>.</li>
+<li><b>title</b> : which was optional for <i>misc</i>.</li>
+<li><b>author</b> : which was optional for <i>booklet, manual, misc.</i></li>
+<li><b>editor</b> : which was optional for <i>proceedings</i>, and is provided by the author list.<br/>
+Removed from <i>book</i> and <i>inbook</i> where author replaces it.</li>
+</ul>
+
+The displayed entries thus satisfy the standard BibTeX rules, although the accepted input rules are
+slightly more restrictive.
+
+<p>
+There is also a facility to initialize the publications database from an existing BibTeX file -- see
+<code>Import/bibtex2table</code> in the distribution.
+</p>
+
+<a name="export"></a>
+<h2>Export</h2>
+Export is available in bibtex or full text. Simply click on the link "Download the List"
+<!-- Export is available in bibTex as well as in XML formats. Current XML DTD corresponds to the <a
+href="http://publicnrs.inist.fr">PubliCNRS</a> format, used by most french labs. Change the script
+or use an XSLT to change the format.
+
+<p>
+See the <a href="cnrs.html">PubliCNRS export guide</a> (in french).
+</p> -->
+
+
+<h2>BasilicPlus licence</h2>
+
+Original soft:
+Basilic Version 1.5.10, released on February 14, 2005.<br/>
+Copyright (C) 2004 Gilles Debunne (<code>Gilles dot Debunne at imag dot fr</code>)
+
+Extended by:
+Arnaud FREY (<code>arnaud dot frey at dpt-info dot u-strasbg dot fr</code>)
+
+<p><a href="http://lsiit.u-strasbg.fr/Software/BasilicPlus/"><code>http://lsiit.u-strasbg.fr/Software/BasilicPlus</code></a></p>
+
+<p>
+BasilicPlus is based on Basilic and like 
+Basilic it is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+</p>
+
+BasilicPlus is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+<p>
+You should have received a copy of the GNU General Public License
+along with BasilicPlus; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+</p>
+
+</div>
+</body>
+</html>

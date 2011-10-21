@@ -1,0 +1,194 @@
+#!/bin/bash
+
+# This script installs the BasilicPlus web pages on your web server.
+#
+# Edit the different parameters as detailed in install.html, then run
+# ./configure to generate (and update) the checkConfig.php test page.
+#
+# You must at least change the mysqlIntranetPassword, LabName and RemoteAddr values
+
+##############################################################################
+#
+# This file is part of the BasilicPlus system
+# Version 1.0.2b, packaged on February 22nd, 2007.
+#
+# http://lsiit.u-strasbg.fr/Software/BasilicPlus
+#
+# BasilicPlus is based on Basilic and like 
+# Basilic is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# Basilic is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Basilic; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+##############################################################################
+
+#   m y S Q L   c o n f i g u r a t i o n
+# Must match the names you used when you created the database.
+mysqlHost="localhost";
+mysqlDatabase="basilic";
+mysqlPublicUser="DB_USER";
+mysqlPublicPassword="DB_PASS";
+mysqlIntranetUser="intranet";
+mysqlIntranetPassword="Put the mySQL intranet password you choosed here"; # change this
+
+
+#   C o n v e r t   c o n f i g u r a t i o n
+# Command to use to create image and movies thumbnails.
+ConvertCommand="convert"
+#ConvertCommand="/usr/local/bin/convert"
+#ConvertCommand='MAGICK_HOME=\".getenv(\"MAGICK_HOME\").\"; export MAGICK_HOME; convert'
+
+#   h t m l d o c   c o n f i g u r a t i o n
+# Enable HTML to PS or PDF rewrite (true/false)
+EnableHtmlDoc="true";
+# Command to use to create ps and pdf documents (download)
+HtmlDocCommand="htmldoc"
+#HtmlDocCommand="/usr/bin/htmldoc"
+
+#   D i r e c t o r y   c o n f i g u r a t i o n
+# All these paths are expressed with respect to web server file system.
+# The URL will be http://your.domain/PATH, where PATH is expressed from server document root.
+
+# Path to the publication main page, from server document root.
+PublicationsPath="/Public"
+#Publications="/Research/Publications"
+
+# Path to intranet backoffice pages, from server document root.
+# The database edition pages will be installed there.
+# Access to this directory should be limited to local machines or
+# protected by a password (.htpasswd).
+BasilicIntranetPath="/Intranet/Basilic"
+#BasilicIntranetPath="/Intranet/BackOffice/Basilic"
+#BasilicIntranetPath="/local/Publication"
+
+# Directory where css files will be installed, from server document root.
+CSSPath="$PublicationsPath/CSS"
+#CSSPath=""       # to install css at server document root
+#CSSPath="css"    # to install in a css specific directory
+
+# Directory where image files will be copied, from server document root. 
+ImagesPath="$PublicationsPath/images"
+
+# The server document root, in which are expressed all the above paths.
+# $_SERVER[DOCUMENT_ROOT] (default) should be ok.
+# Use this variable if files should be copied in a different location. 
+DocumentRoot='\$_SERVER[DOCUMENT_ROOT]'
+#DocumentRoot='/var/www'
+#DocumentRoot='/home/user/public_html'
+
+# The server name used for some absolute links.
+# $_SERVER[SERVER_NAME] (default) should be ok.
+ServerName='http://\$_SERVER[SERVER_NAME]'
+
+#   L a b o r a t o r y   N a m e
+# Will be displayed on top of index pages.
+LabName="Name of your laboratory" # change this
+
+#   L o c a l   b r o w s e r   d e t e c t i o n
+# The administration host ip address
+# Default: the host on which you install Basilic
+AdminIpAddr='\$_SERVER[SERVER_ADDR]'   
+#
+# Your domain ip netmask.
+# Used to create the netmask that filters intranet machines from the rest
+# of the world. Default behavior is to consider as an intranet machine
+# the subnet $RemoteAddr/24. Edit utils.php in the Private directory 
+# to change this mechanism of filtering.
+RemoteAddr="123.456.789.012" # write here an IP address from the local network allowed to access intranet
+ 
+# This is used to fill htaccess file to access private files.
+# If local network does not have a /24 netmask you'll have to modify 
+# the file htaccess_private in your Internet/Publications path after installation
+netaddr=`echo $RemoteAddr | awk -F"."  {'print $1"."$2"."$3"."'}`
+
+#   W a r n i n g   n o t i f i c a t i o n
+# The server administrator e-mail address. Displayed in the page footer so that users can report problems.
+# _SERVER[SERVER_ADMIN] means use the e-mail value defined in your apache configuration.
+# You can replace this by any e-mail address.
+AdminEMail='\$_SERVER[SERVER_ADMIN]'
+#AdminEMail="my.address@mydomain.com"
+
+# The way to notify the publication server administrator of problems.
+# If it contains a '@', it is considered as an e-mail address and an
+# e-mail will be send to this address in case of problem (php must be
+# able to send e-mails for this to work). Otherwise, it is considered
+# as an output (writable) log file where messages will be appended.
+#AdminNotification="/tmp/basilic-log.txt"
+AdminNotification=$AdminEMail     # Will send an e-mail to AdminEMail in case of problem.
+#AdminNotification="/var/log/basilic" # requires write access to /var/log for apache user.
+
+
+# # # #  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+checkArg() {
+ if [[ $1 = "" ]]
+ then
+   echo "Internal error - No parameter given"
+   exit 2
+ fi
+}
+
+error() {
+ checkArg $1
+ echo $1
+ exit 1
+}
+
+cmd() {
+ checkArg $1
+ # echo "Trace : $1"
+ $1
+ if [[ $? -ne 0 ]]
+ then
+   error "Could not execute $1 - Aborting"
+ fi
+}
+
+filter() {
+  checkArg $1
+  cp -f $1 /tmp/basilic.original
+  for var in mysqlHost mysqlDatabase mysqlPublicUser mysqlPublicPassword mysqlIntranetUser mysqlIntranetPassword AdminIpAddr RemoteAddr \
+  AdminEMail AdminNotification ConvertCommand EnableHtmlDoc HtmlDocCommand PublicationsPath BasilicIntranetPath CSSPath ImagesPath LabName DocumentRoot ServerName netaddr
+  do
+    grep "@@$var@@" /tmp/basilic.original > /dev/null
+    if [ $? -eq 0 ]
+    then
+      sed s%"@@$var@@"%"${!var}"%g /tmp/basilic.original > /tmp/basilic.filtered
+      mv /tmp/basilic.filtered /tmp/basilic.original
+    fi
+  done
+  
+  sed /"^This file is part"/,/"^Inc., 59 Temple Place"/d /tmp/basilic.original > $1
+}
+
+echo -n "Filtering files..."
+cmd "cp -f Config/checkConfig.php ."
+cmd "cp -f Config/install.html ."
+filter checkConfig.php
+filter install.html
+cp install.html Intranet
+
+for f in `cd Sources > /dev/null ; find . -type f`
+do
+  rm -f $f
+  cp Sources/$f $f
+  filter $f
+done
+
+echo "done"
+chmod 777 Images
+echo
+echo "Open checkConfig.php in your browser to check your configuration options."
+echo
+echo "Make sure you access this file through your web server using an URL like"
+echo "http://your-server/path/to/basilic/checkConfig.php"
+echo "(and not as a file://...) so that php scripts get interpreted."

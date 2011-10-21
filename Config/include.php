@@ -1,0 +1,1 @@
+<?php $basilicIncludeOk = 1; ?>

@@ -1,0 +1,20 @@
+
+        B a s i l i c P l u s   I n s t a l l a t i o n
+
+Read install.html for configuration and installation instructions.
+
+The installation loop goes like this :
+- Edit "configure" to tune the configuration options.
+- Run ./configure to apply these settings.
+- Open checkConfig.php in a browser to check your configuration status.
+
+Basilic has been tested with:
+- mysql 5.1.54
+- php 5.3.5
+- apache 2.2.17-1
+- htmldoc 1.8.27-4 ( not mandatory )
+
+Import has been tested with:
+- python 2.7.1
+- python-bibtex 1.2.5
+

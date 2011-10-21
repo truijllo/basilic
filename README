@@ -1,0 +1,48 @@
+
+		      B a s i l i c P l u s
+	       Version 1.0.3 Packaged on October 21nd, 2011.
+
+BasilicPlus is an extension of Basilic, and 
+Basilic is a bibliography server designed for research laboratories
+that automates and facilitates the diffusion of their research
+publications over the internet. It automatically generates web pages
+from a publication database, and making a new publication available on
+the web is done in a minute. Each publication can be downloaded from
+its associated web page, which also provides additionnal documents
+(abstract, images, bibTex...). Index pages are also created and feature
+a search engine and an image gallery.
+
+--------------------------------------------------------------------------
+
+See the index.html and usersguide.html pages for details.
+
+See INSTALL for configuration and installation instructions.
+
+Project home page:
+http://artis.imag.fr/Software/Basilic
+
+BasilicPlus Project extension:
+http://lsiit.u-strasbg.fr/Software/BasilicPlus/
+Send e-mail to Gilles.Debunne@imag.fr or arnaud.frey@dpt-info.u-strasbg.fr
+
+
+Customization & new features
+http://www.github.com/truijllo/basilic
+
+--------------------------------------------------------------------------
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+See the LICENCE file for details.
