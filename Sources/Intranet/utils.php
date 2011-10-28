@@ -5,6 +5,7 @@ $public_path 	= "@@PublicationsPath@@";
 $intra_path 	= "@@BasilicIntranetPath@@";
 $images_path	= "@@ImagesPath@@";
 $css_path	= "@@CSSPath@@";
+$database     = "@@mysqlDatabase@@";
 
 // directory name for protected files
 $protected 	= "private"; 
