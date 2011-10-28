@@ -218,7 +218,7 @@ CREATE TABLE `publis` (
   `range` enum('nationales','internationales') default NULL,
   `team` varchar(10) NOT NULL default '',
   `project` int(10) NOT NULL default '1',
-  `url` varchar(255) NOT NULL default '',
+  `url` varchar(1000) NOT NULL default '',
   `class_acti` enum('1','2','3','4','5','6','7','8','9') NOT NULL default '1',
   `com_lect` enum('avec','sans') default NULL,
   `dt_create` datetime NOT NULL default '0000-00-00 00:00:00',
