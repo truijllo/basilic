@@ -36,6 +36,9 @@ echo "</head>\n
 if($_SESSION["Hide"] == 0 or $_SESSION["Hide"]=="")
 {
 	# add here your own headers (lab logos, etc...)
+	if ($OWN_link)
+		{ echo "<a href='$OWN_link'><img src='$OWN_logo' alt='$OWN_name'/></a>"; 
+		}
 }
 else echo "<body>\n";
 
