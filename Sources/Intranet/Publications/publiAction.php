@@ -148,6 +148,9 @@ if ($action=="add")
   $query = "INSERT into publis (dt_create, dt_modif, class_acti,entry, bibTex";
   foreach($fields as $field)
     if (isset($_GET["$field"]))
+        if ($field="range")
+	    $query .= ", `$field`";
+    else
       $query .= ", $field";
   
   switch($_GET['entry'])
@@ -170,7 +173,7 @@ if ($action=="add")
   $query .= ") VALUES (now(), now(), '$class','$_GET[entry]', '$bibTex'";
   foreach($fields as $field)
     if (isset($_GET["$field"]))
-      $query .= ", '".LaTeXToIso($_GET["$field"])."'";
+      $query .= ", '".addslashes(LaTeXToIso($_GET["$field"]))."'";
   $query .= ")";
   debug($query);
   sqlQuery($query);
@@ -293,7 +296,10 @@ else if ($action=="update")
   $query = "UPDATE publis SET dt_modif=now(), entry='$_GET[entry]', bibTex='$bibTex'";
   foreach($fields as $field) 
     if (isset($_GET["$field"]))
-      $query .= ", $field='".LaTeXToIso($_GET[$field])."'";
+	if ($field=='range')
+            $query .= ", `$field`='".addslashes(LaTeXToIso($_GET[$field]))."'";
+        else
+            $query .= ", $field='".addslashes(LaTeXToIso($_GET[$field]))."'";
     
   switch($_GET['entry'])
   {
