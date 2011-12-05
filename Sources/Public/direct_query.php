@@ -5,6 +5,8 @@
 
 session_start();
 if (isset($_GET["search"])) $_SESSION["search"]=$_GET["search"];
+// PATCH !!
+$_SESSION["search"]=1;
 if (isset($_GET["Hide"])) $_SESSION["Hide"]=$_GET["Hide"];
 if (isset($_GET["Affimg"])) $_SESSION["Affimg"]=$_GET["Affimg"];
 
