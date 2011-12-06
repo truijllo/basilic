@@ -522,6 +522,9 @@ function bibQueryResults($option)
 	if (count($authors) == 1) {
 	  // only one author given
 	  $localCriterion .= " AND publis.id=publiauthors.idPubli AND publiauthors.idAuthor=authors.id AND authors.last='$authors[0]'";
+ 	  if (!empty($option['first']))
+		$first=$option['first'];
+       		$localCriterion .= " AND SOUNDEX(authors.first)=SOUNDEX('$first')";
 	  $localTables .= ", publiauthors, authors";
 	}
 	else { 

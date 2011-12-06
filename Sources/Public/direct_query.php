@@ -5,13 +5,16 @@
 
 session_start();
 if (isset($_GET["search"])) $_SESSION["search"]=$_GET["search"];
-// PATCH !!
+// PATCH !
 $_SESSION["search"]=1;
 if (isset($_GET["Hide"])) $_SESSION["Hide"]=$_GET["Hide"];
 if (isset($_GET["Affimg"])) $_SESSION["Affimg"]=$_GET["Affimg"];
 
 // Defines the $lg variable
 require("getLanguage.php");
+
+header("Content-type: text/javascript");
+header("Content-Disposition: inline; filename=\"download.js\"");
 
 switch($lg)
 {
@@ -123,6 +126,9 @@ if (!isset($list))      $list 	   = $_GET["list"];
 if (!isset($searchType_author)) $searchType_author = $_GET["searchType_author"];
 if (!isset($searchType_title)) $searchType_title = $_GET["searchType_title"];
 
+if (!isset($first))    $first    = $_GET["first"]; if (empty($first)) $first = $_SESSION['first'];
+
+
 if (empty($pg)) $pg = 1;
 if (empty($nbPerPage)) $nbPerPage = 20;
 
@@ -131,6 +137,7 @@ $option["annee2"]    = $annee2;
 $option["team"]     = $team;
 $option["project"]   = $project;
 $option["author"]    = $author;
+$option["first"]     = $first;
 $option["display"]   = $display;
 /*$option["full"]      = $full;
 $option["thes"]      = $thes;
@@ -357,6 +364,9 @@ if ($nbPublis==0)
       if (!empty($book))    $param .= "&amp;book=$book";
       $param .= "&amp;pg=-1";
 
+
+      if (!empty($first))
+	$first_condition="AND SOUNDEX(first)=SOUNDEX('$first')";
       // Find names like author name
       $resultLike = sqlQuery("SELECT DISTINCT id,last,first FROM authors WHERE last LIKE '%$author%' AND last!='$author' ORDER BY last ASC");
       while ($resultLike && $row=mysql_fetch_array($resultLike))

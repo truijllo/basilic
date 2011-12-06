@@ -8,7 +8,7 @@
 
 session_start();
 if (isset($_GET["search"])) $_SESSION["search"]=$_GET["search"];
-// PATCH !!!
+// PATCH !!!!
 $_SESSION["search"]=1;
 if (isset($_GET["Hide"])) $_SESSION["Hide"]=$_GET["Hide"];
 if (isset($_GET["Affimg"])) $_SESSION["Affimg"]=$_GET["Affimg"];
@@ -125,7 +125,7 @@ if (!isset($year))      $year 	   = $_GET["year"];
 if (!isset($list))      $list 	   = $_GET["list"];  
 if (!isset($searchType_author)) $searchType_author = $_GET["searchType_author"];
 if (!isset($searchType_title)) $searchType_title = $_GET["searchType_title"];
-
+if (!isset($first))    $first    = $_GET["first"]; if (empty($first)) $author = $_SESSION['first'];
 if (empty($pg)) $pg = 1;
 if (empty($nbPerPage)) $nbPerPage = 20;
 
@@ -134,6 +134,7 @@ $option["annee2"]    = $annee2;
 $option["team"]     = $team;
 $option["project"]   = $project;
 $option["author"]    = $author;
+$option["first"]    = $first;
 $option["display"]   = $display;
 /*$option["full"]      = $full;
 $option["thes"]      = $thes;
