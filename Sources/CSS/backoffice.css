@@ -59,6 +59,9 @@ a:hover {
 	font-family:Arial;
 }
 
+.menu select {
+	width: 142px;
+}
 
 .actionResult {
 	font-size:medium;

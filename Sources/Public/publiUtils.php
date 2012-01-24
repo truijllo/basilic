@@ -69,7 +69,7 @@ switch($lg)
       break;
 
     case "MastersThesis":
-      echo $txtMaster.$row["school"]." ";
+      echo $txtMaster.' - '.$row["school"]." ";
       break;
       
     case "TechReport":
@@ -168,9 +168,9 @@ if (basilic_rights("files")) $criterion = ""; else $criterion = "AND protect='pu
       $type=$drow["type"];
       $src=$drow["source"];
 
-      if ($type=="PDF") $docs.="   <a href=\"$path/$src\"><img class='doc' src='$local_server$images_path/pdf.png' width='19' height='19' alt='$src' /></a>\n";
-      if ($type=="PS")  $docs.="   <a href=\"$path/$src\"><img class='doc' src='$local_server$images_path/ps.png' width='19' height='19' alt='$src' /></a>\n";
-      if ($type=="TXT")  $docs.="   <a href=\"$path/$src\"><img class='doc' src='$local_server$images_path/txt.png' width='19' height='19' alt='$src' /></a>\n";
+      if ($type=="PDF") $docs.="   <a href=\"$path/$src\"><img alt='[Download PDF version]' class='doc' src='$local_server$images_path/pdf.png' width='19' height='19' alt='$src' /></a>\n";
+      if ($type=="PS")  $docs.="   <a href=\"$path/$src\"><img alt='[Download PS version]' class='doc' src='$local_server$images_path/ps.png' width='19' height='19' alt='$src' /></a>\n";
+      if ($type=="TXT")  $docs.="   <a href=\"$path/$src\"><img alt='[Download TXT version]' class='doc' src='$local_server$images_path/txt.png' width='19' height='19' alt='$src' /></a>\n";
  }
     
   if (isset($thumb))
@@ -682,9 +682,9 @@ function printRAP($row,$frame=True)
 	      $type=$drow["type"];
 	      $src=$drow["source"];
 
-	      if ($type=="PDF") $docs.="   <a href=\"$path/$add_path$src\"><img class='doc' src='$local_server$images_path/pdf.png' width='19' height='19' alt='$src' /></a>\n";
-	      if ($type=="PS")  $docs.="   <a href=\"$path/$add_path$src\"><img class='doc' src='$local_server$images_path/ps.png' width='19' height='19' alt='$src' /></a>\n";
-	      if ($type=="TXT")  $docs.="   <a href=\"$path/$add_path$src\"><img class='doc' src='$local_server$images_path/txt.png' width='19' height='19' alt='$src' /></a>\n";
+	      if ($type=="PDF") $docs.="   <a href=\"$path/$add_path$src\"><img alt='[Download PDF version]' class='doc' src='$local_server$images_path/pdf.png' width='19' height='19' alt='$src' /></a>\n";
+	      if ($type=="PS")  $docs.="   <a href=\"$path/$add_path$src\"><img alt='[Download PS version]' class='doc' src='$local_server$images_path/ps.png' width='19' height='19' alt='$src' /></a>\n";
+	      if ($type=="TXT")  $docs.="   <a href=\"$path/$add_path$src\"><img alt='[Download TXT version]' class='doc' src='$local_server$images_path/txt.png' width='19' height='19' alt='$src' /></a>\n";
 	 }
 
   $resu = sqlQuery("SELECT * FROM authors,publiauthors where authors.id=publiauthors.idAuthor AND publiauthors.idPubli=$id ORDER BY rank ASC");
@@ -847,8 +847,8 @@ function printRAP($row,$frame=True)
 		if ((!$_SESSION[Hide]) and ( $frame))
 		  {
 			echo "<a href=\"";
-			if (empty($_GET["list"])) print "javascript:OuvrirPopup('$local_server$public_path/cart.php?add=$row[id]','Modification de la s&eacute;lection', 'resizable=no, location=no, width=500, height=80, menubar=no, status=no, scrollbars=no, menubar=no')\" title='Add this publication to your selection'><img src='$local_server$images_path/panier.gif'>";
-			else print "$local_server$public_path/cart.php?del=$row[id]\" title='Remove this publication from your selection'><img src='$local_server$images_path/panier_off.jpg'>";
+			if (empty($_GET["list"])) print "javascript:OuvrirPopup('$local_server$public_path/cart.php?add=$row[id]','Modification de la s&eacute;lection', 'resizable=no, location=no, width=500, height=80, menubar=no, status=no, scrollbars=no, menubar=no')\" title='Add this publication to your selection'><img src='$local_server$images_path/panier.gif' alt='[Add to your selection]'>";
+			else print "$local_server$public_path/cart.php?del=$row[id]\" title='Remove this publication from your selection'><img src='$local_server$images_path/panier_off.jpg' alt='[Remove from your selection]'>";
 			echo "</a>";
 		  }
 		print "</td><td width=88%>

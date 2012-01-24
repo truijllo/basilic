@@ -3,11 +3,11 @@
   # error_reporting(E_ALL | E_ERROR | E_WARNING | E_PARSE);
 
   # If file was uploaded, it's size should be > 0
-  if (!empty($HTTP_POST_FILES['fichier1']['size'])) {
+  if (!empty($_FILES['fichier1']['size'])) {
     // size, name and tmp name
-    $f1_size = $HTTP_POST_FILES['fichier1']['size'];
-    $f1_name = $HTTP_POST_FILES['fichier1']['name'];
-    $f1_tmpname = $HTTP_POST_FILES['fichier1']['tmp_name'];
+    $f1_size = $_FILES['fichier1']['size'];
+    $f1_name = $_FILES['fichier1']['name'];
+    $f1_tmpname = $_FILES['fichier1']['tmp_name'];
 
     // Get extension (Remove compression extensions)
     $ext = get_extension($f1_name);

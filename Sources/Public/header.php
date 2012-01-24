@@ -4,14 +4,15 @@ session_start();
 # XHTML compatibility has to be reviewed
 //echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//$lg'\n";
 //echo "    'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>\n";
-//echo "<?xml version='1.0' encoding='iso-8859-1'\n";
+//echo "<?xml version='1.0' encoding='UTF-8'\n";
 //echo "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='fr' lang='$lg'>\n";
+header("Content-Type: text/html; charset=utf-8"); 
 echo "<html>\n";
 echo "<head>\n";
 
 # Title of the page
 if (!isset($title)) $title="@@LabName@@";
-echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso8859-1\" />\n";
+echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n";
 echo " <title>$title</title>\n";
      
 # favicon

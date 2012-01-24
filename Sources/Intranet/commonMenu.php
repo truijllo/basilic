@@ -6,7 +6,7 @@ require_once("utils.php");
  &nbsp; Database :
  </p>
  <div style="margin-left:20px">
-  <a href="<? echo $intra_path;?>/help.php" target="edit">&raquo; Help page <img src='<?echo $images_path;?>/fr.png'><br />
+  <a href="<? echo $intra_path;?>/help.php" target="edit">&raquo; Help page <!--<img src='<?echo $images_path;?>/fr.png'>--><br />
   <a href="<? echo $intra_path;?>/Publications" target="_parent">&raquo; Edit a publication<br />
   <a href="<? echo $intra_path;?>/Authors" target="_parent">&raquo; Edit an author<br/>
   <?php

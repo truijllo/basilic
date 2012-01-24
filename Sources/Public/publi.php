@@ -51,7 +51,7 @@ $row = mysql_fetch_array($result) or die("Error : no publication found");
 
 # Title and header
 $title="$row[title]";
-$css="$css_path/publi.css";
+$css="$local_server$css_path/publi.css";
 $metaKeywords=$row["keywords"];
 $metaDescription=$row["title"];
 

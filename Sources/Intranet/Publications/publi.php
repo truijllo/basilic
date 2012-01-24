@@ -401,8 +401,8 @@ $tip = array("publisher" 	=> "Springer, ACM Press, Addison Wesley...",
 	     "type"      	=> "Research Notes, ...",
 	     "series" 		=> "Annual Conference Series, Computer Science,...",
 	     "edition"		=> "Second, Third...",
-	     "range"		=> "nationale, internationale",
-	     "review"		=> "comit&eacute; de lecture",
+	     "range"		=> "national, international",
+	     "review"		=> "peer review committee",
 	     "team"		=> "select your team");
 
 function printSelectAuthor()
@@ -415,7 +415,7 @@ function printSelectAuthor()
   echo " <div style='text-align:center'>\n";
   echo "   <span style='font-size:small'>Name</span>\n";
   echo "   <input size='15' maxlength='30' name='name' value='$name'/>\n";
-  echo "   &nbsp; <input type='button' value=' Update ' style='font-size:10px;' onClick='updateList();'/>\n";
+  echo "   &nbsp; <input type='button' value=' Search ... ' style='font-size:10px;' onClick='updateList();'/>\n";
 
   echo "<br/>\n";
 
@@ -435,7 +435,7 @@ function printSelectAuthor()
     }
   else
     {
-      echo "   <select name='selectAuthor' size='3' style='font-size:12px;width:20em;margin-top:5px'>\n";
+      echo "   <select name='selectAuthor' size='8' style='font-size:12px;width:20em;margin-top:5px'>\n";
       while ($result && $row=mysql_fetch_array($result))
 	echo "   <option value='$row[id],$row[last],$row[first]'>$row[last] $row[first]</option>\n";
       echo "   </select><br/>\n";
@@ -447,7 +447,7 @@ function printSelectAuthor()
   echo " <input type='button' value=' Add  >> ' src='$images_path/authorADD.png' style='font-size:10px;' onClick='selectAuthorFromList();'/>\n";
   echo "</td><td>\n";
 
-  echo " <select multiple name='authorSelect' size='5' style='font-size:12px;width:20em'>\n";
+  echo " <select multiple name='authorSelect' size='10' style='font-size:12px;width:20em'>\n";
 
   if (!empty($_GET["authorList"]))
     {
@@ -510,15 +510,15 @@ function printSelectPortee()
 	else 
 		$range="";
 	echo " <select name='range' size='1'>";
-	if($range=="nationales")
+	if($range=="national")
 	{
-		echo " <option selected>nationales</option>";
-		echo " <option>internationales</option>";
+		echo " <option selected>national</option>";
+		echo " <option>international</option>";
 	}
 	else
 	{
-		echo " <option >nationales</option>";
-		echo " <option selected>internationales</option>";
+		echo " <option >national</option>";
+		echo " <option selected>international</option>";
 	}
 	echo " </select>\n";
 }
@@ -532,15 +532,15 @@ function printSelectLect()
 	else 
 		$com_lect="";
 	echo " <select name='com_lect' size='1'>";
-	if($com_lect=="sans")
+	if($com_lect=="without")
 	{
-		echo " <option selected>sans</option>";
-		echo " <option>avec</option>";
+		echo " <option selected>without</option>";
+		echo " <option>with</option>";
 	}
 	else
 	{
-		echo " <option >sans</option>";
-		echo " <option selected>avec</option>";
+		echo " <option >without</option>";
+		echo " <option selected>with</option>";
 	}
 	echo " </select>\n";
 }
@@ -591,7 +591,7 @@ function printSelectEquip()
 	global $id, $images_path;
   	
   	echo "<table><tr><td>\n";
-	echo " <select name='selectTeam' size='3' style='font-size:12px;width:10em'>\n";
+	echo " <select name='selectTeam' size='10' style='font-size:12px;width:10em'>\n";
 	
 	$resu=sqlQuery("select id, sigle from equip");
 	while($table=mysql_fetch_array($resu))
@@ -602,7 +602,7 @@ function printSelectEquip()
 	echo " </select></td><td>\n";
 	echo " <input type='button' value=' Add >> ' style='font-size:10px;' onClick='selectTeamFromList();'/>\n";
 	echo "</td><td>\n";
-	echo "<select multiple name='teamSelect' size='3' style='font-size:12px;width:10em;'>\n";
+	echo "<select multiple name='teamSelect' size='10' style='font-size:12px;width:10em;'>\n";
 	if (!empty($id))	// in case of edition display previous selected teams
 	{
 	    $aresult=sqlQuery("select DISTINCT id, sigle from equip, publiequip WHERE publiequip.idPubli=$id AND publiequip.idEquip=equip.id ORDER BY rank ASC");
