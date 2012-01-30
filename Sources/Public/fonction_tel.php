@@ -245,7 +245,7 @@ function printRAP_Aff($row)
 	switch($row['entry'])
 	{
 		case "Article":
-			if($pt["range"]=="nationales")
+			if($pt["range"]=="national")
 			{
 				$titre="[3-".$tmp."]";
 			}
@@ -260,7 +260,7 @@ function printRAP_Aff($row)
 			$aff .= " - $row[month] $row[year]";
 			break;
 		case "InProceedings":
-			if($pt["range"]=="nationales")
+			if($pt["range"]=="national")
 			{
 				$titre="[5-".$tmp."]";
 			}
@@ -328,7 +328,7 @@ function printRAP_Aff($row)
 			$aff.="$titre	$row[title]\n		$nom\n		$row[organization] $row[address] $row[edition] - $row[month] $row[year]";
 			break;
 		case "Proceedings":
-			if($pt["range"]=="nationales")
+			if($pt["range"]=="national")
 			{
 				$titre="[5-".$tmp."]";
 			}
@@ -457,7 +457,7 @@ function printHTML_Aff($row)
 	switch($row['entry'])
 	{
 		case "Article":
-			if($pt["range"]=="nationales")
+			if($pt["range"]=="national")
 			{
 				$titre.="[3-".$tmp."]";
 			}
@@ -472,7 +472,7 @@ function printHTML_Aff($row)
 			$aff .= " - $row[month] $row[year]$inter_end";
 			break;
 		case "InProceedings":
-			if($pt["range"]=="nationales")
+			if($pt["range"]=="national")
 			{
 				$titre.="[5-".$tmp."]";
 			}
@@ -540,7 +540,7 @@ function printHTML_Aff($row)
 			$aff.="$titre $inter_ref_title $row[title]\n $inter_title_author $nom\n $inter_author_bib $row[organization] $row[address] $row[edition] - $row[month] $row[year]$inter_end";
 			break;
 		case "Proceedings":
-			if($pt["range"]=="nationales")
+			if($pt["range"]=="national")
 			{
 				$titre.="[5-".$tmp."]";
 			}

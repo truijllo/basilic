@@ -182,7 +182,7 @@ function printStatus($class)
 	echo "<div class='$class'>";
 	echo "<span class='label '>Status";
 	echo "<img src='$images_path/empty.png' width='6' height='12' alt=''/> &nbsp; </span>";
-	echo "<select name='statut' size='1'";
+	echo "<select name='statut' size='1'>";
 	if($row["statut"]=="actual")
 		echo "<option selected>actual</option>";
 	else

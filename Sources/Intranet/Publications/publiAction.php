@@ -155,8 +155,8 @@ if ($action=="add")
   
   switch($_GET['entry'])
   {
-  	case "Article":if ($_GET["com_lect"]=="sans") $class=6; else if($_GET["range"]=="nationales") $class=3; else $class=2; break;
-	case "InProceedings":if ($_GET["com_lect"]=="sans") $class=6; else if($_GET["range"]=="nationales") $class=5; else $class=4; break;
+  	case "Article":if ($_GET["com_lect"]=="without") $class=6; else if($_GET["range"]=="national") $class=3; else $class=2; break;
+	case "InProceedings":if ($_GET["com_lect"]=="without") $class=6; else if($_GET["range"]=="national") $class=5; else $class=4; break;
 	case "InBook":$class=1; break;
 	case "Book":$class=1; break;
 	case "PhdThesis":$class=9;break;
@@ -166,7 +166,7 @@ if ($action=="add")
 	case "Booklet":$class=1;break;
 	case "InCollection":$class=1;break;
 	case "Manual":$class=8;break;
-	case "Proceedings":if($_GET["range"]=="nationales") $class=5; else $class=4; break;
+	case "Proceedings":if($_GET["range"]=="national") $class=5; else $class=4; break;
 	case "Unpublished":$class=8;break;
   }
   
@@ -303,8 +303,8 @@ else if ($action=="update")
     
   switch($_GET['entry'])
   {
-  	case "Article":if ($_GET["com_lect"]=="sans") $class=6; else if($_GET["range"]=="nationales") $class=3; else $class=2; break;
-	case "InProceedings":if ($_GET["com_lect"]=="sans") $class=6; else if($_GET["range"]=="nationales") $class=5; else $class=4; break;
+  	case "Article":if ($_GET["com_lect"]=="without") $class=6; else if($_GET["range"]=="national") $class=3; else $class=2; break;
+	case "InProceedings":if ($_GET["com_lect"]=="without") $class=6; else if($_GET["range"]=="national") $class=5; else $class=4; break;
 	case "InBook":$class=1; break;
 	case "Book":$class=1; break;
 	case "PhdThesis":$class=9;break;
@@ -314,7 +314,7 @@ else if ($action=="update")
 	case "Booklet":$class=1;break;
 	case "InCollection":$class=1;break;
 	case "Manual":$class=8;break;
-	case "Proceedings":if($_GET["range"]=="nationales") $class=5; else $class=4; break;
+	case "Proceedings":if($_GET["range"]=="national") $class=5; else $class=4; break;
 	case "Unpublished":$class=8;break;
   }
 

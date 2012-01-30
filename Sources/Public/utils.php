@@ -23,7 +23,8 @@ $rap_c 		= "Rapport de Contrat";
 
 $OWN_link = "http://path_to_your_home";
 $OWN_name = "you company";
-$OWN_version = "$OWN_name - 2011";
+$this_year = date('Y');
+$OWN_version = "$OWN_name - $this_year";
 $OWN_logo = "$images_path/your_logo.png";
 
 $frame = "frame.php";

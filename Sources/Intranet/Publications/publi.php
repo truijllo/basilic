@@ -403,7 +403,9 @@ $tip = array("publisher" 	=> "Springer, ACM Press, Addison Wesley...",
 	     "edition"		=> "Second, Third...",
 	     "range"		=> "national, international",
 	     "review"		=> "peer review committee",
-	     "team"		=> "select your team");
+	     "team"		=> "select your team",
+             "number"           => "If used as seminars date, use the convention YYYYMMDD");
+);
 
 function printSelectAuthor()
 {
@@ -491,7 +493,7 @@ function printSelectYear()
   if (empty($id))
     $row["year"] = date("Y");
   
-  for ($i=(date("Y"));$i>1985;$i--)
+  for ($i=(date("Y"));$i>1969;$i--)
     {
       echo "  <option value='$i'";
       if ($i==$row["year"])

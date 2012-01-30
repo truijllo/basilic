@@ -783,13 +783,13 @@ function printRAP($row,$frame=True)
 	{
 		// parametrages selon la classe d'entrée
 		case "Article":
-			if($pt["range"]==nationales)
+			if($pt["range"]==national)
 				$titre="3-".$tmp;
 			else
 				$titre="2-".$tmp;
 			break;
 		case "InProceedings":
-			if($pt["range"]==nationales)
+			if($pt["range"]==national)
 				$titre="5-".$tmp;
 			else
 				$titre="4-".$tmp;
@@ -823,7 +823,7 @@ function printRAP($row,$frame=True)
 			$titre="8-".$tmp;
 			break;
 		case "Proceedings":
-			if($pt["range"]==nationales)
+			if($pt["range"]==national)
 				$titre="5-".$tmp;
 			else
 				$titre="4-".$tmp;

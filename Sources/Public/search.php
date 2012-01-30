@@ -259,7 +259,7 @@ echo "<tr>\n";
     echo ">$txtToutes</option>\n";
     $y=date("Y");
     #while ($y>=1989) Limited to 2000 cause DB is incomplete before
-    while ($y>1999)
+    while ($y>1989)
     {
       echo "    <option value='$y'";
       if ($y==$year)

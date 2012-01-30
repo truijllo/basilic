@@ -23,7 +23,8 @@ if (empty($action))
 }
 
 $first    = $_GET["first"];
-$last     = strtoupper($_GET["last"]);
+//$last     = strtoupper($_GET["last"]);
+$last     = $_GET["last"];
 $mail     = $_GET["mail"];if (empty($mail)) $mail="";
 $org      = $_GET["org"];if (empty($org)) $org="";
 $tel      = $_GET["tel"];if (empty($tel)) $tel="";
