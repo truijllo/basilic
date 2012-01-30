@@ -30,7 +30,7 @@ if (!basilic_rights("access"))
   <select name="id" size="10" onChange='document.forms["editTeam"].submit();'>
   <?php
    sqlConnect();
-   $aresult = sqlQuery("SELECT id, sigle FROM equip ");
+   $aresult = sqlQuery("SELECT id, sigle FROM equip order by show_order DESC, sigle ASC ");
    while ($aresult && $arow = mysql_fetch_array($aresult))
      echo "  <option value='".$arow["id"]."'>".$arow["sigle"]." ".$arow["description"]."</option>\n";
   ?>
