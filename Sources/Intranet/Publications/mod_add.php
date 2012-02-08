@@ -13,12 +13,11 @@
     $ext = get_extension($f1_name);
 
     // array containing accepted extensions
-    $valides = array("jpeg","ppm","psd","tiff","xbm","xpm","mpg","mp4","wmv","qt","py","pps","html","bmp","jpg","gif","png","tif","pdf","ps","avi","mpeg","ppt","mov","txt");
+    $valides = array("jpeg","ppm","psd","tiff","xbm","xpm","mpg","mp4","wmv","qt","py","pps","html","bmp","jpg","gif","png","tif","pdf","ps","avi","mpeg","ppt","mov","txt","rtf","prn","Z","tar","doc","gz");
 
     // some tests on size
     if ($f1_size > $MAX_UP_SIZE) $infos .= "- This file is to big (size limit is $MAX_UP_SIZE octets)\n";
     if (!in_array($ext,$valides)) $infos .= "- This file type ($ext) is not allowed\n";
-
     if ($infos == "") 
     {
     	echo "<div class='information'>\n";

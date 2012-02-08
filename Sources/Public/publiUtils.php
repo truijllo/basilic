@@ -1,5 +1,7 @@
 <?php
 
+require_once("utils.php");
+
 function printConference($row)
 {
 global $lg;
@@ -14,7 +16,7 @@ switch($lg)
 	break;
 	case "de":
 	$txtPhd="PhD These";
-	$txtHDR="Forschung überwachung Diplom";
+	$txtHDR="Forschung ï¿½berwachung Diplom";
 	$txtMaster="Vorlagenthese";
 	$txtTechRep="Technischer Report";
 	$txtAll="Alle";
@@ -44,7 +46,7 @@ switch($lg)
       if($row[booktitle]!="")
       	$champ="$row[booktitle]";
       if($row[proceedings]!="" and $row[proceedings] != $row[booktitle])
-// ancienne ligne en dessous, sécurité pour éviter d'afficher 2x
+// ancienne ligne en dessous, sï¿½curitï¿½ pour ï¿½viter d'afficher 2x
 //      if($row[proceedings]!="")
       	$champ.=", $row[proceedings]";
       if($loc!="")
@@ -112,6 +114,85 @@ function printAuthors($id)
     }
 }
 
+
+# Called by displayPublication()
+function printThumbs($row)
+{
+  global $lg;
+  global $local_server,$public_path;
+  $id=$row["id"];
+  $year=$row["year"];
+  $bibtex=$row["bibTex"];
+  $path="$local_server$public_path/$year/$bibtex";
+
+//ajouter pour supprimer les image
+if($_SESSION["Affimg"]==0)
+{
+  if (basilic_rights("files")) $criterion = ""; else $criterion = "AND protect='public'";
+  // Retrieve associated documents
+  $dresult = sqlQuery("SELECT type,source,sizeX,sizeY FROM docs,publidocs where docs.id=publidocs.idDoc AND publidocs.idPubli=$id AND (type='IMG') $criterion ORDER BY source ASC");
+  
+  while ($dresult && $drow=mysql_fetch_array($dresult))
+    {
+      $type=$drow["type"];
+      $src=$drow["source"];
+      if ($type=="IMG" && !isset($firstImage))
+	{
+	  $firstImage = 1;
+	  $ratio=1.0*$drow["sizeX"]/$drow["sizeY"];
+	  $h=60.0;
+	  $w=$h*$ratio;
+	  $pt=13;
+	  if ($w>80)
+	    {
+	      $w=80;
+	      $h=$w/$ratio;
+	      $pt=13 + (60-$h)/2.0;
+	    }
+
+	  $w=floor($w);
+	  $h=floor($h);
+	  $pt=floor($pt)."px";
+
+	  $thumb ="  <div style='padding-top:$pt'><a href='$path'>\n";
+	  $thumb.="   <img src='$path/.thumbs/$src.jpg' width='$w' height='$h' alt='[$bibtex]'/></a>\n";
+	  $thumb.="  </div>\n";
+	}
+    }
+
+//fin suppression des images
+}
+
+if (basilic_rights("files")) $criterion = ""; else $criterion = "AND protect='public'";
+// thumbs for files
+ $dresult = sqlQuery("SELECT type,source FROM docs,publidocs where docs.id=publidocs.idDoc AND publidocs.idPubli=$id AND (type='PDF' OR type='PS' or type='TXT') $criterion ORDER BY type DESC,source ASC");
+ while ($dresult && $drow=mysql_fetch_array($dresult))
+ {
+      $type=$drow["type"];
+      $src=$drow["source"];
+
+      //if ($type=="PDF") $docs.="   <a href=\"$path/$src\"><img alt='[Download PDF version]' class='doc' src='$local_server$images_path/pdf.png' width='19' height='19' alt='$src' /></a>\n";
+      if ($type=="PDF") $docs.="   <a href=\"$path/$src\" ><img title='[Download PDF version]' alt='[Download PDF version]' class='doc' src='$local_server$images_path/pdf.png' width='16' height='16' alt='$src' /></a>\n";
+      if ($type=="PS")  $docs.="   <a href=\"$path/$src\"><img title='[Download PS version]' alt='[Download PS version]' class='doc' src='$local_server$images_path/ps.png' width='16' height='16' alt='$src' /></a>\n";
+      if ($type=="TXT")  $docs.="   <a href=\"$path/$src\"><img title='[Download TXT version]' alt='[Download TXT version]' class='doc' src='$local_server$images_path/txt.png' width='16' height='16' alt='$src' /></a>\n";
+ }
+    
+  if (isset($thumb))
+    {
+      echo " <div class='thumb image'>\n";
+      echo " $thumb";
+      echo " </div>\n";
+  echo " <div class='ref'>\n";
+    }
+  else
+//    echo " <div class='thumb'></div>\n";
+    echo " <div class='ref_nothumb'>\n";
+
+}
+
+
+
+
 # Called by displayPublication()
 function printPubliLine($row)
 {
@@ -152,7 +233,7 @@ if($_SESSION["Affimg"]==0)
 	  $pt=floor($pt)."px";
 
 	  $thumb ="  <div style='padding-top:$pt'><a href='$path'>\n";
-	  $thumb.="   <img src='$path/.thumbs/$src.jpg' width='$w' height='$h' alt='$bibtex'/></a>\n";
+	  $thumb.="   <img src='$path/.thumbs/$src.jpg' width='$w' height='$h' alt='[$bibtex]'/></a>\n";
 	  $thumb.="  </div>\n";
 	}
     }
@@ -168,9 +249,10 @@ if (basilic_rights("files")) $criterion = ""; else $criterion = "AND protect='pu
       $type=$drow["type"];
       $src=$drow["source"];
 
-      if ($type=="PDF") $docs.="   <a href=\"$path/$src\"><img alt='[Download PDF version]' class='doc' src='$local_server$images_path/pdf.png' width='19' height='19' alt='$src' /></a>\n";
-      if ($type=="PS")  $docs.="   <a href=\"$path/$src\"><img alt='[Download PS version]' class='doc' src='$local_server$images_path/ps.png' width='19' height='19' alt='$src' /></a>\n";
-      if ($type=="TXT")  $docs.="   <a href=\"$path/$src\"><img alt='[Download TXT version]' class='doc' src='$local_server$images_path/txt.png' width='19' height='19' alt='$src' /></a>\n";
+      // if ($type=="PDF") $docs.="   <a href=\"$path/$src\"><img alt='[Download PDF version]' class='doc' src='$local_server$images_path/pdf.png' width='19' height='19' alt='$src' /></a>\n";
+      if ($type=="PDF") $docs.="   <a href=\"$path/$src\"><img title='[Download PDF version]' alt='[Download PDF version]' class='doc' src='$local_server$images_path/pdf.png' width='16' height='16' alt='$src' /></a>\n";
+      if ($type=="PS")  $docs.="   <a href=\"$path/$src\"><img title='[Download PS version]' alt='[Download PS version]' class='doc' src='$local_server$images_path/ps.png' width='16' height='16' alt='$src' /></a>\n";
+      if ($type=="TXT")  $docs.="   <a href=\"$path/$src\"><img title='[Download TXT version]' alt='[Download TXT version]' class='doc' src='$local_server$images_path/txt.png' width='16' height='16' alt='$src' /></a>\n";
  }
     
   if (isset($thumb))
@@ -338,8 +420,8 @@ function printBibTex($row,$bool)
    else
       	  $res .= "  url          = ".'{'."$row[url]\n";
   
-  $pattern = array("é","è","ê","ë","á","à","â","ä","í","ì","î","ï",
-		   "ó","ò","ô","ö","ú","ù","û","ü","ç","Ç","ñ","Ñ","&");
+  $pattern = array("ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½",
+		   "ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","&");
   $replace = array("\'e","\`e","\^e","{\\\"e}","\'a","\`a","\^a","{\\\"a}","\'{\i}","\`{\i}","\^{\i}","{\\\"{\i}}",
 		   "\'o","\`o","\^o","{\\\"o}","\'u","\`u","\^u","{\\\"u}","\c{c}","\c{C}","\~{n}","\~{N}","\&");
 
@@ -520,10 +602,13 @@ function bibQueryResults($option)
 	$localTables = "";
 	if (count($authors) == 1) {
 	  // only one author given
-	  $localCriterion .= " AND publis.id=publiauthors.idPubli AND publiauthors.idAuthor=authors.id AND authors.last='$authors[0]'";
-	  if (!empty($option['first']))
-                $first=$option['first'];
-                $localCriterion .= " AND SOUNDEX(authors.first)=SOUNDEX('$first')";
+	  $val_auth=check_input($authors[0]);
+//	  $localCriterion .= " AND publis.id=publiauthors.idPubli AND publiauthors.idAuthor=authors.id AND authors.last='$authors[0]'";
+//	  echo "$val_auth";
+	  $localCriterion .= " AND publis.id=publiauthors.idPubli AND publiauthors.idAuthor=authors.id AND authors.last='$val_auth'";
+//	  if (!empty($option['first']))
+//                $first=$option['first'];
+//                $localCriterion .= " AND SOUNDEX(authors.first)=SOUNDEX('$first')";
 	  $localTables .= ", publiauthors, authors";
 	}
 	else { 
@@ -532,7 +617,8 @@ function bibQueryResults($option)
 	    {  // AND search
 	    $localCriterion .= " AND (1";
 	    foreach ($authors as $author) {
-	      $localCriterion .= " AND publis.id = p$paTable.idPubli AND p$paTable.idAuthor = a$aTable.id AND a$aTable.last = '$author'";
+	      $val_auth=check_input($author);
+	      $localCriterion .= " AND publis.id = p$paTable.idPubli AND p$paTable.idAuthor = a$aTable.id AND a$aTable.last = '$val_auth'";
 	      $localTables .= ", authors AS a$aTable, publiauthors AS p$paTable";
 	      $aTable++; $paTable++;
 	    }
@@ -542,9 +628,15 @@ function bibQueryResults($option)
 	    $localTables .= ", publiauthors, authors";
 	    $localCriterion .= " AND publis.id=publiauthors.idPubli AND publiauthors.idAuthor=authors.id AND (0"; 
 	    foreach ($authors as $author) {
-	      $localCriterion .= " OR authors.last = '$author'";
+	      $val_auth=check_input($author);
+	      $localCriterion .= " OR authors.last = '$val_auth'";
 	    }
-	  }
+	    }
+//	echo "$localCriterion "+" OR SOUNDEX(a$aTable)=SOUNDEX('" //+check_input(options[author])+"')";
+//	 echo "$localCriterion "." OR SOUNDEX(a$aTable)=SOUNDEX('".check_input(options[author])."')"; 
+	  $localCriterion .= " OR SOUNDEX(authors.last)=SOUNDEX('".check_input($option[author]);
+//	  $localCriterion .= " OR SOUNDEX(authors.first)=SOUNDEX('".check_input($option[author]);
+	  $localCriterion.="')";
 	  $localCriterion .= ")";
 	}
 	$criterion .= $localCriterion;
@@ -682,9 +774,10 @@ function printRAP($row,$frame=True)
 	      $type=$drow["type"];
 	      $src=$drow["source"];
 
-	      if ($type=="PDF") $docs.="   <a href=\"$path/$add_path$src\"><img alt='[Download PDF version]' class='doc' src='$local_server$images_path/pdf.png' width='19' height='19' alt='$src' /></a>\n";
-	      if ($type=="PS")  $docs.="   <a href=\"$path/$add_path$src\"><img alt='[Download PS version]' class='doc' src='$local_server$images_path/ps.png' width='19' height='19' alt='$src' /></a>\n";
-	      if ($type=="TXT")  $docs.="   <a href=\"$path/$add_path$src\"><img alt='[Download TXT version]' class='doc' src='$local_server$images_path/txt.png' width='19' height='19' alt='$src' /></a>\n";
+//	      if ($type=="PDF") $docs.="   <a href=\"$path/$add_path$src\"><img alt='[Download PDF version]' class='doc' src='$local_server$images_path/pdf.png' width='19' height='19' alt='Download $src' /></a>\n";
+	      if ($type=="PDF") $docs.="   <a href=\"$path/$add_path$src\"><img title='[Download PDF version]' alt='[Download PDF version]' class='doc' src='$local_server$images_path/pdf.png' width='16' height='16' alt='Download $src' /></a>\n";
+	      if ($type=="PS")  $docs.="   <a href=\"$path/$add_path$src\"><img title='[Download PS version]' alt='[Download PS version]' class='doc' src='$local_server$images_path/ps.png' width='16' height='16' alt='Download $src' /></a>\n";
+	      if ($type=="TXT")  $docs.="   <a href=\"$path/$add_path$src\"><img title='[Download TXT version]' alt='[Download TXT version]' class='doc' src='$local_server$images_path/txt.png' width='16' height='16' alt='Download $src' /></a>\n";
 	 }
 
   $resu = sqlQuery("SELECT * FROM authors,publiauthors where authors.id=publiauthors.idAuthor AND publiauthors.idPubli=$id ORDER BY rank ASC");
@@ -749,7 +842,8 @@ function printRAP($row,$frame=True)
 		switch($row['class_acti'])
 		{
 			case 1:
-			echo"<table width=100%><tr align=left><td><b>Works and collaborations</td></tr>
+			//echo"<table width=100%><tr align=left><td><b>Works and collaborations</td></tr>
+			echo"<table width=100%><tr align=left><td><b>Books and Book Chapters</td></tr>
 				<tr height=2><td bgcolor=#003399></td></tr></table>";
 			break;
 			case 2:
@@ -761,15 +855,15 @@ function printRAP($row,$frame=True)
 				<tr height=2><td bgcolor=#003399></td></tr></table>";
 			break;
 			case 4:
-			echo"<table width=100%><tr align=left><td><b>Peer-reviewed talks in international events </td></tr>
+			echo"<table width=100%><tr align=left><td><b>Peer-reviewed publications in international events </td></tr>
 				<tr height=2><td bgcolor=#003399></td></tr></table>";
 			break;
 			case 5:
-			echo"<table width=100%><tr align=left><td><b>Peer-reviewed talks in national events</td></tr>
+			echo"<table width=100%><tr align=left><td><b>Peer-reviewed publications in national events</td></tr>
 				<tr height=2><td bgcolor=#003399></td></tr></table>";
 			break;
 			case 6:
-			echo"<table width=100%><tr align=left><td><b>Various talks and publications</td></tr>
+			echo"<table width=100%><tr align=left><td><b>Various talks, works and publications</td></tr>
 				<tr height=2><td bgcolor=#003399></td></tr></table>";
 			break;
 			case 7:
@@ -789,7 +883,7 @@ function printRAP($row,$frame=True)
 	
 	switch($row['entry'])
 	{
-		// parametrages selon la classe d'entrée
+		// parametrages selon la classe d'entrï¿½e
 		case "Article":
 			if($pt["range"]==national)
 				$titre="3-".$tmp;
@@ -842,30 +936,36 @@ function printRAP($row,$frame=True)
 	}
 
 	echo"<table width=100%>
-		<tr align='left' valign='top'><td width=12% rowspan=3 align='center'><b>[$titre]</b><br /><br />";
-		// link to cart in standard view
+		<tr align='left' valign='top'><td width=12% rowspan=3 align='center'><b>[$titre]</b> ";
+
 		if ((!$_SESSION[Hide]) and ( $frame))
 		  {
 			echo "<a href=\"";
-			if (empty($_GET["list"])) print "javascript:OuvrirPopup('$local_server$public_path/cart.php?add=$row[id]','Modification de la s&eacute;lection', 'resizable=no, location=no, width=500, height=80, menubar=no, status=no, scrollbars=no, menubar=no')\" title='Add this publication to your selection'><img src='$local_server$images_path/panier.gif' alt='[Add to your selection]'>";
+			//if (empty($_GET["list"])) print "javascript:OuvrirPopup('$local_server$public_path/cart.php?add=$row[id]','Modification de la s&eacute;lection', 'resizable=no, location=no, width=500, height=80, menubar=no, status=no, scrollbars=no, menubar=no')\" class='cart-a' title='Add this publication to your selection'><img src='$local_server$images_path/panier.gif' alt='[Add to your selection]'>";
+			if (empty($_GET["list"])) print "javascript:OuvrirPopup('$local_server$public_path/cart.php?add=$row[id]','Modification de la s&eacute;lection', 'resizable=no, location=no, width=500, height=80, menubar=no, status=no, scrollbars=no, menubar=no')\" class='cart-a' title='Add this publication to your selection'><img src='$local_server$images_path/book_next.png' alt='[Add to your selection]'>";
 			else print "$local_server$public_path/cart.php?del=$row[id]\" title='Remove this publication from your selection'><img src='$local_server$images_path/panier_off.jpg' alt='[Remove from your selection]'>";
 			echo "</a>";
 		  }
-		print "</td><td width=88%>
-		<a href='$lien'>$row[title]</a>  $docs</td></tr><tr align='left'><td width=88%>";
+		 echo " ";
+		printThumbs($row);
+		// link to cart in standard view
+		
+		print "</td><td width=88%> <div class='title'>
+		<a href='$lien'>$row[title]</a>  $docs</div>\n";
+
   		// Search for authors
 		  echo "  <div class='authors'>\n";
 		  printAuthors($id);
-		  echo "\n  </div></td></tr>\n";
+		  echo "\n  </div>\n";
 		//printName($name,$last,$url);
-	echo "<tr align='left'><td width=88%>";
+	echo "<div class='conf'>\n  ";
 	
 	switch($row['entry'])
 	{
-		// parametrages selon la classe d'entrée
+		// parametrages selon la classe d'entrï¿½e
 		case "Article":
 			echo "$row[journal]";
-			if (!empty($row[publisher])) echo " $row[publisher]";	// rajouté le 25/04/2006
+			if (!empty($row[publisher])) echo " $row[publisher]";	// rajoutï¿½ le 25/04/2006
 			if (!empty($row[pages])) echo " pages $row[pages]";	
 			if (!empty($row[volume])) echo " vol. $row[volume]";	
 			if (!empty($row[number])) echo " num. $row[number]";	
@@ -981,7 +1081,7 @@ function printRAP($row,$frame=True)
 
 	}
 	
-	echo "</tr></table>";
+	echo "</div></td></tr></table>";
 }
 
 

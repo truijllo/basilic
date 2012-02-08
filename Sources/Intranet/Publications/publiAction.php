@@ -2,6 +2,8 @@
 session_start();
 require_once("../utils.php");
 
+
+header("Content-Type: text/html; charset=utf-8");
 if (!basilic_rights("access")) 
 	header("Location: $public_path/noway.php");
 ?>
@@ -9,6 +11,7 @@ if (!basilic_rights("access"))
 <head>
  <meta http-equiv='pragma' content='no-cache'>
  <meta http-equiv='expires' content='0'>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
  <link rel="stylesheet" href="<?echo $css_path;?>/backoffice.css" type="text/css" />
 </head>
 
@@ -77,7 +80,8 @@ function computeBibTexKey()
       else
 	$key=$key.strtoupper(substr($last,0,1));
     }
-  $key=strtr($key, "áâàäÂÁÀÄéêèëÊÉÈËîíìïÎÍÌÏóôòöÔÓÒÖúûùüÛÚÙÜçC", "aaaaAAAAeeeeEEEEiiiiIIIIooooOOOOuuuuUUUUcC");
+  $key=str_replace(" ","",$key);
+  $key=strtr($key, "áâàäÂÁÀÄéêèëÊÉÈËîíìïÎÍÌÏóôòöÔÓÒÖúûùüÛÚÙÜçC ", "aaaaAAAAeeeeEEEEiiiiIIIIooooOOOOuuuuUUUUcC_");
   $key=$key.substr($_GET["year"],2,2);
   debug("bibTex=<b>$key</b>");
   return $key;
@@ -148,7 +152,7 @@ if ($action=="add")
   $query = "INSERT into publis (dt_create, dt_modif, class_acti,entry, bibTex";
   foreach($fields as $field)
     if (isset($_GET["$field"]))
-//        if ($field="range")
+//        if ($field=="range")
 	    $query .= ", `$field`";
 //    else
 //      $query .= ", `$field`";
@@ -193,7 +197,7 @@ if ($action=="add")
   // Link to teams
   $teamIds = explode(",", $_GET["teamList"]);
     // extern publications will be marked to optimise SQL search
-    if (count($teamIds) == 1 and $teamIds[0] == '13') {
+    if (count($teamIds) == 1 and $teamIds[0] == '11') {
   	debug("publi marked as extern");
 	sqlQuery("UPDATE publis set dt_modif=now(), team='extern' WHERE id=$id");
     }
@@ -224,7 +228,8 @@ if ($action=="add")
   echo "See the <a href='../usersguide.html' target='_top'>Publication help page</a> for details.</p>\n";
 
   echo "<p>\n<a href='publi.php?id=$id'>Back to publication edition</a><br/>\n";
-  echo "<a href='$public_path/$year/$bibTex' target='_top'>See the publication associated page</a></p>\n";
+//  echo "Manage files associated to <a href='/intranet/Publications/publiFiles.php?id=$id' >this publication</a>. &nbsp; &nbsp; <br/>";
+  echo "<a href='$local_server$public_path/$year/$bibTex' target='_top'>See the publication associated page</a></p>\n";
 }
 
 
@@ -325,7 +330,8 @@ else if ($action=="update")
   echo "<p>\nPublication has been updated.</p>\n";
 
   echo "<p>\n<a href='publi.php?id=$id'>Back to publication edition</a><br/>\n";
-  echo "<a href='$public_path/$year/$bibTex' target='_top'>See the publication associated page</a></p>\n";
+  echo "<a href='$local_server$public_path/$year/$bibTex' target='_top'>See the publication associated page</a><br/>\n";
+  echo "Manage files associated to <a href='/intranet/Publications/publiFiles.php?id=$id' >this publication</a>. &nbsp; &nbsp;</p> ";
 }
 
 

@@ -2,6 +2,7 @@
 session_start();
 require_once("../utils.php");
 
+header("Content-Type: text/html; charset=utf-8");
 if (!basilic_rights("access")) 
 	header("Location: $public_path/noway.php");
 ?>
@@ -9,6 +10,7 @@ if (!basilic_rights("access"))
 <head>
   <meta http-equiv='pragma' content='no-cache'>
   <meta http-equiv='expires' content='0'>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="stylesheet" href="<?echo $css_path;?>/backoffice.css" type="text/css" />
 </head>
 

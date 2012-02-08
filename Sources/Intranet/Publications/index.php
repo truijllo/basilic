@@ -8,6 +8,7 @@ if (!basilic_rights("access"))
 <html>
 <head>
  <title>Basilic backOffice - Publications</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <frameset cols="190,*" frameborder="YES">
   <frame name="menu" src="menuPubli.php">

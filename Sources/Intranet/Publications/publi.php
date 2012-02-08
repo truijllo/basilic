@@ -2,6 +2,7 @@
 session_start();
 require_once("../utils.php");
 
+header("Content-Type: text/html; charset=utf-8");
 if (!basilic_rights("access")) 
 	header("Location: $public_path/noway.php");
 ?>
@@ -9,6 +10,7 @@ if (!basilic_rights("access"))
 <head>
  <meta http-equiv='pragma' content='no-cache'>
  <meta http-equiv='expires' content='0'>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
  <link rel="stylesheet" href="<?echo $css_path;?>/backoffice.css" type="text/css" />
 </head>
 
@@ -403,26 +405,31 @@ $tip = array("publisher" 	=> "Springer, ACM Press, Addison Wesley...",
 	     "edition"		=> "Second, Third...",
 	     "range"		=> "national, international",
 	     "review"		=> "peer review committee",
+//	     "review"		=> "comit&eacute; de lecture",
 	     "team"		=> "select your team",
-             "number"           => "If used as seminars date, use the convention YYYYMMDD");
-);
+	     "number"		=> "If used as seminars date, use the convention YYYYMMDD");
 
 function printSelectAuthor()
 {
   global $id,$images_path;
   $name = $_GET["name"];
+  $rname= check_input($name);
+  $rname=htmlspecialchars($name,ENT_QUOTES);
 
   // Div are not that good
   echo "<table><tr><td>\n";
   echo " <div style='text-align:center'>\n";
   echo "   <span style='font-size:small'>Name</span>\n";
-  echo "   <input size='15' maxlength='30' name='name' value='$name'/>\n";
+  echo "   <input size='15' maxlength='30' name='name' value='$rname'/>\n";
   echo "   &nbsp; <input type='button' value=' Search ... ' style='font-size:10px;' onClick='updateList();'/>\n";
 
   echo "<br/>\n";
 
   if (!empty($name))
-    $where = "WHERE (last LIKE '%$name%' OR first LIKE '%$name%')";
+	{      $rlast = check_input($name);
+	    $where = "WHERE (last LIKE '%$rlast%'  OR first LIKE '%$rlast%')";
+	    //$where = "WHERE (last LIKE '%$name%' OR first LIKE '%$name%')";
+	}
   else $where = "WHERE 1";
   $where .= " and is_author = 'oui'";
 
@@ -439,7 +446,13 @@ function printSelectAuthor()
     {
       echo "   <select name='selectAuthor' size='8' style='font-size:12px;width:20em;margin-top:5px'>\n";
       while ($result && $row=mysql_fetch_array($result))
-	echo "   <option value='$row[id],$row[last],$row[first]'>$row[last] $row[first]</option>\n";
+	{ 
+	 // $rlast=check_input($row[last]);
+	 // $rfirst=check_input($row[first]);
+	//echo "   <option value='$row[id],$row[last],$row[first]'>$row[last] $row[first]</option>\n";
+	//echo "   <option value='$row[id],$rlast,$rfirst'>$row[last] $row[first]</option>\n";
+	echo '   <option value="'.$row[id].','.$row[last].','.$row[first].'">'."$row[last] $row[first]</option>\n";
+        }
       echo "   </select><br/>\n";
     }
   echo " </div>\n";
@@ -595,7 +608,9 @@ function printSelectEquip()
   	echo "<table><tr><td>\n";
 	echo " <select name='selectTeam' size='10' style='font-size:12px;width:10em'>\n";
 	
-	$resu=sqlQuery("select id, sigle from equip");
+	$resu=sqlQuery("select id, sigle from equip order by show_order DESC,sigle ASC");
+//	$resu=sqlQuery("select id, sigle from equip where sigle in ('CRS4','External') union (select id, sigle from equip where sigle not in ('CRS4','External') order by sigle)");
+	
 	while($table=mysql_fetch_array($resu))
 	{
 		// Team list (always the same)
@@ -814,8 +829,9 @@ echo " </div>\n";
 echo "</form>\n";
 echo " </div>\n\n";
 if (!empty($id))
-  echo "See the publication's <a href='$local_server$public_path/$row[year]/$row[bibTex]' target='parent'>associated web page</a>. &nbsp; &nbsp; ";
-echo "<img src='$local_server$images_path/required.png' width='6' height='12' alt=''/> Fields in red must be filled\n\n";
+  echo "See the publication's <a href='$local_server$public_path/$row[year]/$row[bibTex]' target='parent'>associated web page</a>. &nbsp; &nbsp; <br/> ";
+  echo "Manage files associated to <a href='/intranet/Publications/publiFiles.php?id=$id' >this publication</a>. &nbsp; &nbsp; ";
+echo "<br/><img src='$local_server$images_path/required.png' width='6' height='12' alt=''/> Fields in red must be filled\n\n";
 ?>
 
 </body>

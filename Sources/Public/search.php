@@ -198,7 +198,7 @@ echo "<br><table style='font-size:small' align='center' border='0' cellspacing='
 // Author
 echo "<tr>\n";
   echo "<td align='right'>\n";
-    echo "   <b>$txtAuteur:</b> </td><td colspan='2'> <input type='text' size='40' name='author' value='".stripslashes($author)."' onBlur='javascript:check_author();'/>\n";
+    echo "   <b>$txtAuteur:</b> </td><td colspan='2'> <input type='text' size='40' name='author' value=".'"'.$author.'"'." onBlur='javascript:check_author();'/>\n";
   echo "</td><td>";
     echo "  <select name='searchType_author' ";
     if (count(explode(" ",$author))<=1) echo "disabled=disabled"; 

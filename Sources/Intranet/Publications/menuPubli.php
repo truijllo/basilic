@@ -45,8 +45,8 @@ if (isset($_GET))
     Select a year<br/>
     <select name="year" size="1" onChange='document.forms["yearForm"].submit();'>
      <option value=""> &nbsp; --- </option>
+
 <?php
- 
 mysql_select_db($database) or die("impossible d'acc&eacute;der &agrave; la base de donn&eacute;e basilic\n");
 $yresult = sqlQuery("SELECT DISTINCT year from publis, equip, publiequip $tables WHERE publiequip.idEquip=equip.id and publiequip.idPubli=publis.id ORDER BY year DESC");
 $i = 0;

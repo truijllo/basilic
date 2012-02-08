@@ -2,21 +2,25 @@
 session_start();
 require_once("../utils.php");
 
+header("Content-Type: text/html; charset=utf-8");
 if (!basilic_rights("access")) 
 	header("Location: $public_path/noway.php");
 
 # maximum upload file size
-$MAX_UP_SIZE=5000000;
+# $MAX_UP_SIZE=5000000;
+$MAX_UP_SIZE=55000000;
 
   if (!empty($_POST["id"]))	$id=$_POST["id"];
   if (!empty($_POST["action"])) $action=$_POST["action"];
   if (!empty($_POST["id_doc"])) $id_doc=$_POST["id_doc"];
-
+  if (!empty($_GET["id"]))   $id=$_GET["id"];
 ?>
 <html>
 <head>
  <meta http-equiv='pragma' content='no-cache'>
  <meta http-equiv='expires' content='0'>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
  <link rel="stylesheet" href="<?echo $css_path;?>/backoffice.css" type="text/css" />
 </head>
 
@@ -50,7 +54,7 @@ if (!empty($id))
 }
 else
 {
-  echo "<p>Please select a publication first...</p>\n";
+  echo "<p>You are trying to upload a file over the limit or without choosing the linked publication ...</p>\n";
 }
 
 // Add new file
