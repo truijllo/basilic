@@ -73,7 +73,7 @@ switch($_POST["format"])
 		{
 			$fd = fopen("publi.txt","a");
 			if($year!=$tmp["year"]) {
-				fwrite($fd,"\n\nAnnee:$tmp[year]\n\n");
+				fwrite($fd,"\n\nYear:$tmp[year]\n\n");
 				$class = "";
 			}
 			$year=$tmp["year"];

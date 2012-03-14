@@ -203,7 +203,7 @@ function printRAP_Aff($row)
 		switch($row['class_acti'])
 		{
 			case 1:
-			$aff.="\nWorks or collaborations\n";
+			$aff.="\nBooks and Book Chapters\n";
 			break;
 			case 2:
 			$aff.="\nPeer-reviewed publications in international Journals\n";
@@ -214,15 +214,15 @@ function printRAP_Aff($row)
 			//$aff.="\nArticles dans des revues nationales &grave; comit&eacute; de lecture\n";
 			break;
 			case 4:
-			$aff.="\nPeer-reviewed talks in international events\n";
+			$aff.="\nPeer-reviewed publications in international events\n";
 			//$aff.="\nCommunications &agrave; des manifestations internationales &agrave; comit&eacute; de lecture\n";
 			break;
 			case 5:
-			$aff.="\nPeer-reviewed talks in national events\n";
+			$aff.="\nPeer-reviewed publications in national events\n";
 			//$aff.="\nCommunications &agrave; des manifestations nationales &agrave; comit&eacute; de lecture\n";
 			break;
 			case 6:
-			$aff.="\nVarious talks and publications\n";
+			$aff.="\nVarious talks, works and publications\n";
 			//$aff.="\nCommunications et publications diverses\n";
 			break;
 			case 7:
@@ -400,7 +400,7 @@ function printHTML_Aff($row)
 		switch($row['class_acti'])
 		{
 			case 1:
-			$aff.="\n<table width=100%><tr align=left><td><b>Works and collaborations</td></tr>
+			$aff.="\n<table width=100%><tr align=left><td><b>Books and book chapters</td></tr>
 				<tr height=2><td bgcolor=#003399></td></tr></table>\n";
 			//$aff.="\n<table width=100%><tr align=left><td><b>Ouvrage ou participation à des ouvrages</td></tr>
 			break;
@@ -415,17 +415,17 @@ function printHTML_Aff($row)
 			//$aff.="\n<table width=100%><tr align=left><td><b>Articles dans des revues nationales à comité de lecture</td></tr>
 			break;
 			case 4:
-			$aff.="\n<table width=100%><tr align=left><td><b>Peer-reviewed talks in international events 
+			$aff.="\n<table width=100%><tr align=left><td><b>Peer-reviewed publications in international events 
 				</td></tr><tr height=2><td bgcolor=#003399></td></tr></table>\n";
 			//$aff.="\n<table width=100%><tr align=left><td><b>Communications à des manifestations internationales à comité de lecture
 			break;
 			case 5:
-			$aff.="\n<table width=100%><tr align=left><td><b>Peer-reviewed talks in national events
+			$aff.="\n<table width=100%><tr align=left><td><b>Peer-reviewed publications in national events
 				</td></tr><tr height=2><td bgcolor=#003399></td></tr></table>\n";
 			//$aff.="\n<table width=100%><tr align=left><td><b>Communications à des manifestations nationales à comité de lecture
 			break;
 			case 6:
-			$aff.="\n<table width=100%><tr align=left><td><b>Various talks and publications</td></tr>
+			$aff.="\n<table width=100%><tr align=left><td><b>Various talks, works and publications</td></tr>
 				<tr height=2><td bgcolor=#003399></td></tr></table>\n";
 			//$aff.="\n<table width=100%><tr align=left><td><b>Communications et publications diverses</td></tr>
 			break;
